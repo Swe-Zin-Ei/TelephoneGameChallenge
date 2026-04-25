@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telephone Game Challenge – About Us</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="./index.html"><img src="./images/logo.png"/></a>
+                <span>Telephone Game</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="gameinfo.html" class="nav-link"><i class="fas fa-info-circle"></i> Game Info</a>
+                <a href="about.html" class="nav-link active"><i class="fas fa-users"></i> About Us</a>
+            </div>
+            <div class="nav-clock">
+                <div class="clock-item"><i class="fas fa-clock"></i><span id="navTime">--:--:-- --</span></div>
+                <div class="clock-item"><i class="fas fa-calendar-alt"></i><span id="navDate">---</span></div>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
+                <button class="nav-btn menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="nav-link" id="accountNavLink"><i class="fas fa-user-circle"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== ACCOUNT MODAL (minimal for functionality) ========== -->
+    <div class="modal" id="accountModal">
+        <div class="modal-content account-modal">
+            <div class="account-header"><i class="fas fa-user-circle account-avatar"></i><h2 id="accountName">Player Name</h2><p class="account-member-since">Member since <span id="memberSince">Just now</span></p></div>
+            <div class="account-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;">
+                <div class="account-stat-card"><i class="fas fa-gamepad"></i><div><h4>Games</h4><p id="gamesPlayed">0</p></div></div>
+                <div class="account-stat-card"><i class="fas fa-trophy"></i><div><h4>Best</h4><p id="bestScore">0</p></div></div>
+                <div class="account-stat-card"><i class="fas fa-chart-line"></i><div><h4>Avg</h4><p id="avgAccuracy">0%</p></div></div>
+            </div>
+            <div class="account-actions"><button class="btn edit-name-btn" id="editNameBtn"><i class="fas fa-edit"></i> Change Name</button><button class="btn close-account-btn" id="closeAccountBtn"><i class="fas fa-times"></i> Close</button></div>
+        </div>
+    </div>
+    <div class="modal" id="editNameModal"><div class="modal-content"><h2>Edit name</h2><div class="setting-group"><label>New Name</label><input type="text" id="newUserName" maxlength="20"></div><div class="modal-buttons"><button class="btn save-btn" id="saveNewName">Save</button><button class="btn cancel-btn" id="cancelEditName">Cancel</button></div></div></div>
+
+    <!-- ========== MAIN ABOUT CONTENT – TWO RECTANGLES TOUCHING ========== -->
+    <main style="max-width:1200px;margin:2rem auto;padding:0 2rem;">
+        <div class="about-stack">
+            <!-- TOP RECTANGLE (two columns) -->
+            <div class="top-about">
+                <div class="top-text">
+                    <h2><i class="fas fa-quote-left"></i>Chinese Whisper</h2>
+                    <p>A dinner party game gone digital. We turned misheard whispers into a global voice‑recognition challenge.</p>
+                </div>
+                <div class="top-image">
+                    <!-- image placeholder with fallback (exactly as your previous code) -->
+                    <img src="./images/whisper.jpg" alt="whisper" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-phone-alt\' style=\'font-size:5rem;color:var(--accent-purple);\'></i><p style=\'margin-top:0.5rem;color:var(--text-mid);\'>whisper illustration</p>'">
+                </div>
+            </div>
+            <!-- BOTTOM RECTANGLE (three columns) – directly attached -->
+            <div class="bottom-about">
+                <div class="bottom-label"><span>ABOUT US</span></div>
+                <div class="bottom-center">
+                    <h2><i class="fas fa-gamepad"></i> What we built</h2>
+                    <p>Browser‑based telephone game with real voice recognition & text‑to‑speech.</p>
+                    <p>Choose your English level (B1–C2) and voice type — each round twists the message further.</p>
+                    <p>Made by a tiny team in this game.</p>
+                </div>
+                <div class="bottom-right"></div> <!-- empty as requested -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-phone-alt"></i> Telephone Game</h3>
+                <p>The classic party game where messages get hilariously twisted as they're passed from person to person.</p>
+                <div class="social-links"><a href="#" class="social-link"><i class="fab fa-github"></i></a></div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="about.html"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="gameinfo.html"><i class="fas fa-chevron-right"></i> Game Info</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Game Features</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-microphone"></i> Voice Recognition</li>
+                    <li><i class="fas fa-volume-up"></i> Text-to-Speech</li>
+                    <li><i class="fas fa-robot"></i> Multiple Voices</li>
+                    <li><i class="fas fa-graduation-cap"></i> English Levels</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-envelope"></i> support@telephonegame.com</li>
+                    <li><i class="fas fa-globe"></i> szetelephonegamechallenge.neocities.org</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Edinburgh, Scotland</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p>&copy; 2026 Telephone Game Challenge. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+        <script src="./scripts/game.js"></script>
+
+</body>
+</html>
