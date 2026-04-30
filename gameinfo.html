@@ -3,26 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telephone Game Challenge - Game Info</title>
+    <meta name="description" content="Learn how to play Telephone Game Challenge - Rules, features, and instructions for the memory and voice recognition game">
+    <meta name="author" content="Swe Zin Ei Ei">
+    <meta name="keywords" content="telephone game rules, game instructions, how to play, voice recognition game, memory game">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Telephone Game Challenge - Game Info & Rules</title>
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="./images/favicon.png">
 </head>
 <body>
+
+    <!-- ================================================================ -->
+    <!-- SECTION 1: NAVIGATION BAR                                        -->
+    <!-- ================================================================ -->
     <nav class="navbar">
         <div class="nav-container">
+            <!-- Brand Logo and Name -->
             <div class="nav-brand">
-                <a href="./index.html"><img src="./images/logo.png"/></a>
+                <a href="./index.html">
+                    <img src="./images/logo.png" alt="Telephone Game Logo">
+                </a>
                 <span>Telephone Game</span>
             </div>
             
+            <!-- Navigation Links -->
             <div class="nav-menu" id="navMenu">
                 <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
                 <a href="gameinfo.html" class="nav-link active"><i class="fas fa-info-circle"></i> Game Info</a>
                 <a href="about.html" class="nav-link"><i class="fas fa-users"></i> About Us</a>
             </div>
 
+            <!-- Live Clock Display -->
             <div class="nav-clock">
                 <div class="clock-item">
                     <i class="fas fa-clock"></i>
@@ -34,6 +49,7 @@
                 </div>
             </div>
             
+            <!-- Action Buttons -->
             <div class="nav-actions">
                 <button class="nav-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
                 <button class="nav-btn menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
@@ -44,7 +60,9 @@
         </div>
     </nav>
 
-    <!-- ========== ACCOUNT MODAL ========== -->
+    <!-- ================================================================ -->
+    <!-- SECTION 2: ACCOUNT MODAL                                         -->
+    <!-- ================================================================ -->
     <div class="modal" id="accountModal">
         <div class="modal-content account-modal">
             <div class="account-header">
@@ -53,6 +71,7 @@
                 <p class="account-member-since">Member since <span id="memberSince">Just now</span></p>
             </div>
             
+            <!-- User Statistics Cards -->
             <div class="account-stats">
                 <div class="account-stat-card">
                     <i class="fas fa-gamepad"></i>
@@ -77,13 +96,15 @@
                 </div>
             </div>
             
+            <!-- Certificates Section -->
             <div class="account-certificates">
                 <h3><i class="fas fa-certificate"></i> Your Certificates</h3>
                 <div class="certificates-grid" id="certificatesGrid">
-                    <!-- Certificates will be loaded here -->
+                    <!-- Certificates loaded dynamically by JavaScript -->
                 </div>
             </div>
             
+            <!-- Account Action Buttons -->
             <div class="account-actions">
                 <button class="btn edit-name-btn" id="editNameBtn">
                     <i class="fas fa-edit"></i> Change Name
@@ -95,7 +116,9 @@
         </div>
     </div>
 
-    <!-- ========== EDIT NAME MODAL ========== -->
+    <!-- ================================================================ -->
+    <!-- SECTION 3: EDIT NAME MODAL                                       -->
+    <!-- ================================================================ -->
     <div class="modal" id="editNameModal">
         <div class="modal-content">
             <h2><i class="fas fa-user-edit"></i> Change Your Name</h2>
@@ -104,7 +127,7 @@
                 <label for="newUserName">
                     <i class="fas fa-user"></i> New Name
                 </label>
-                <input type="text" id="newUserName" placeholder="Enter your new name" maxlength="20">
+                <input type="text" id="newUserName" placeholder="Enter your new name" maxlength="20" autocomplete="off">
             </div>
 
             <div class="modal-buttons">
@@ -118,59 +141,71 @@
         </div>
     </div>
 
-    <!-- ========== MAIN GAME INFO CONTENT ========== -->
+    <!-- ================================================================ -->
+    <!-- SECTION 4: MAIN GAME INFO CONTENT                                -->
+    <!-- ================================================================ -->
     <main class="info-page-main">
-        <!-- Header with cat ears -->
+        
+        <!-- Page Header -->
         <div class="info-header">
-            <h1></h1>
-
+            <h1><i class="fas fa-info-circle"></i> How to Play</h1>
+            <p class="subtitle">Learn the rules and discover all the features of Telephone Game Challenge</p>
         </div>
 
-        <!-- Steps Grid -->
+        <!-- ============================================================ -->
+        <!-- SECTION 4.1: GAME STEPS - 4 STEP CARDS                       -->
+        <!-- ============================================================ -->
         <div class="steps-grid">
-            <!-- Step 1 -->
+            
+            <!-- Step 1: Enter Your Name -->
             <div class="step-card">
                 <div class="step-number">
                     <span>1</span>
                 </div>
-                <h3>Enter Your Name</h3>
-                <p>Start by telling us who you are. The game remembers you!</p>
+                <h3><i class="fas fa-user-plus"></i> Enter Your Name</h3>
+                <p>Start by telling us who you are. The game remembers your profile, game history, and achievements across sessions using localStorage.</p>
             </div>
 
-            <!-- Step 2 -->
+            <!-- Step 2: Remember the Message -->
             <div class="step-card">
                 <div class="step-number">
                     <span>2</span>
                 </div>
-                <h3>Remember the Message</h3>
-                <p>You'll see a message. Remember it carefully!</p>
+                <h3><i class="fas fa-brain"></i> Remember the Message</h3>
+                <p>You'll see a message appear on screen. The message will also be read aloud automatically. Listen carefully and remember every word!</p>
             </div>
 
-            <!-- Step 3 -->
+            <!-- Step 3: Type or Speak -->
             <div class="step-card">
                 <div class="step-number">
                     <span>3</span>
                 </div>
-                <h3>Type or Speak</h3>
-                <p>Type what you remember OR use the microphone to speak it.</p>
+                <h3><i class="fas fa-microphone"></i> Type or Speak</h3>
+                <p>Choose your preferred input method. Type the message exactly as you remember it, or use the microphone to speak it naturally.</p>
             </div>
 
-            <!-- Step 4 -->
+            <!-- Step 4: Pass It On -->
             <div class="step-card">
                 <div class="step-number">
                     <span>4</span>
                 </div>
-                <h3>Pass It On</h3>
-                <p>The next player gets your version. See how it changes!</p>
+                <h3><i class="fas fa-share"></i> Pass It On</h3>
+                <p>The next player receives your version of the message. Watch how the message transforms as it passes through the chain of players!</p>
             </div>
         </div>
 
-        <!-- Features Section -->
+        <!-- ============================================================ -->
+        <!-- SECTION 4.2: FEATURES GRID - 6 FEATURE CARDS                 -->
+        <!-- ============================================================ -->
         <div class="features-section">
-
+            
+            <div class="features-title">
+                <h2><i class="fas fa-star"></i> Game Features <i class="fas fa-star"></i></h2>
+            </div>
 
             <div class="features-grid">
-                <!-- Voice Recognition -->
+                
+                <!-- Feature 1: Voice Recognition -->
                 <div class="feature-item">
                     <div class="feature-header">
                         <div class="feature-icon">
@@ -179,11 +214,11 @@
                         <span class="feature-title">Voice Recognition</span>
                     </div>
                     <div class="feature-description">
-                        Speak your message naturally and our AI will transcribe it in real-time. Works with multiple accents and speech patterns.
+                        Speak your message naturally using the Web Speech API. Our speech recognition works in real-time and supports multiple accents. Perfect for practising pronunciation!
                     </div>
                 </div>
 
-                <!-- Text-to-Speech -->
+                <!-- Feature 2: Text-to-Speech -->
                 <div class="feature-item">
                     <div class="feature-header">
                         <div class="feature-icon">
@@ -192,11 +227,11 @@
                         <span class="feature-title">Text-to-Speech</span>
                     </div>
                     <div class="feature-description">
-                        Listen to messages being read aloud in natural-sounding voices. Helps with pronunciation and listening comprehension.
+                        Messages are automatically read aloud in natural-sounding voices. This simulates the real telephone game experience where you only hear the message once.
                     </div>
                 </div>
 
-                <!-- Multiple Voices -->
+                <!-- Feature 3: Multiple Voices -->
                 <div class="feature-item">
                     <div class="feature-header">
                         <div class="feature-icon">
@@ -205,11 +240,11 @@
                         <span class="feature-title">Multiple Voices</span>
                     </div>
                     <div class="feature-description">
-                        Choose from 5 different voice types: Male, Female, Girl, Old Woman, and Old Man. Each with unique character.
+                        Choose from 5 unique voice types: Male, Female, Girl, Old Woman, and Old Man. Each voice has different pitch and character, adding variety to each game.
                     </div>
                 </div>
 
-                <!-- English Levels -->
+                <!-- Feature 4: English Levels -->
                 <div class="feature-item">
                     <div class="feature-header">
                         <div class="feature-icon">
@@ -218,11 +253,11 @@
                         <span class="feature-title">English Levels</span>
                     </div>
                     <div class="feature-description">
-                        Four difficulty levels: B1 (Beginner) to C2 (Expert). Speech speed and complexity adjust to your level.
+                        Four difficulty levels: B1 (80% speed), B2 (100% speed), C1 (120% speed), C2 (140% speed). Adjust speech speed to match your listening comprehension level.
                     </div>
                 </div>
 
-                <!-- Achievement Certificates -->
+                <!-- Feature 5: Achievement Certificates -->
                 <div class="feature-item">
                     <div class="feature-header">
                         <div class="feature-icon">
@@ -231,11 +266,11 @@
                         <span class="feature-title">Achievement Certificates</span>
                     </div>
                     <div class="feature-description">
-                        Earn 7 unique certificates for milestones like first game, high accuracy, and games played. Show off your progress!
+                        Earn 7 unique certificates for reaching milestones: First Steps, Sharp Memory (80%), Perfect Recall (90%), Photographic Memory (100%), Enthusiast (5 games), Veteran (10 games), Legend (25 games).
                     </div>
                 </div>
 
-                <!-- Game History -->
+                <!-- Feature 6: Game History -->
                 <div class="feature-item">
                     <div class="feature-header">
                         <div class="feature-icon">
@@ -244,16 +279,63 @@
                         <span class="feature-title">Game History</span>
                     </div>
                     <div class="feature-description">
-                        Track all your past games with original and final messages, accuracy scores, and dates. See how much you've improved!
+                        All your games are saved automatically. Track original messages, final messages, accuracy scores, dates, and categories. See your improvement over time!
+                    </div>
+                </div>
+
+                <!-- Feature 7: Word Categories (Bonus) -->
+                <div class="feature-item">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <span class="feature-title">Word Categories</span>
+                    </div>
+                    <div class="feature-description">
+                        Choose from 5 categories: Easy (25 words), Medium (15 sentences), Hard (15 complex sentences), Funny (15 jokes), Movies (15 famous quotes). Never play the same game twice!
+                    </div>
+                </div>
+
+                <!-- Feature 8: Dark Mode -->
+                <div class="feature-item">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <span class="feature-title">Dark Mode</span>
+                    </div>
+                    <div class="feature-description">
+                        Toggle between light and dark themes for comfortable gameplay day or night. Your preference is saved in your browser automatically.
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 4.3: TIPS SECTION                                     -->
+        <!-- ============================================================ -->
+        <div class="tips-section">
+            <div class="tips-card">
+                <h3><i class="fas fa-lightbulb"></i> Pro Tips</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Use headphones for better audio clarity when messages are read aloud</li>
+                    <li><i class="fas fa-check-circle"></i> Speak clearly and at a moderate pace for best voice recognition results</li>
+                    <li><i class="fas fa-check-circle"></i> Start with Easy category and B1 level if you're a beginner</li>
+                    <li><i class="fas fa-check-circle"></i> Challenge yourself with Hard category and C2 speed as you improve</li>
+                    <li><i class="fas fa-check-circle"></i> Check your certificates to track your progress and achievements</li>
+                    <li><i class="fas fa-check-circle"></i> Use keyboard shortcuts: Ctrl+Enter to submit, Space to speak, N for next round</li>
+                </ul>
+            </div>
+        </div>
+
     </main>
 
-    <!-- ========== FOOTER ========== -->
+    <!-- ================================================================ -->
+    <!-- SECTION 5: FOOTER                                                -->
+    <!-- ================================================================ -->
     <footer class="footer">
         <div class="footer-content">
+            <!-- About Section -->
             <div class="footer-section">
                 <h3><i class="fas fa-phone-alt"></i> Telephone Game</h3>
                 <p>The classic party game where messages get hilariously twisted as they're passed from person to person.</p>
@@ -262,6 +344,7 @@
                 </div>
             </div>
             
+            <!-- Quick Links -->
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
@@ -271,6 +354,7 @@
                 </ul>
             </div>
             
+            <!-- Features List -->
             <div class="footer-section">
                 <h3>Game Features</h3>
                 <ul class="footer-links">
@@ -281,6 +365,7 @@
                 </ul>
             </div>
             
+            <!-- Contact Information -->
             <div class="footer-section">
                 <h3>Contact</h3>
                 <ul class="footer-links">
@@ -291,6 +376,7 @@
             </div>
         </div>
         
+        <!-- Copyright -->
         <div class="footer-bottom">
             <div class="footer-bottom-content">
                 <p>&copy; 2026 Telephone Game Challenge. All rights reserved.</p>
@@ -298,19 +384,23 @@
         </div>
     </footer>
 
-    <!-- User Registration Modal (for new users) -->
+    <!-- ================================================================ -->
+    <!-- SECTION 6: USER REGISTRATION MODAL                               -->
+    <!-- ================================================================ -->
     <div class="modal" id="userModal">
         <div class="modal-content">
             <h2><i class="fas fa-user-plus"></i> Welcome to Telephone Game!</h2>
             <p>Please tell us about yourself</p>
             
+            <!-- Name Input -->
             <div class="setting-group">
                 <label for="userName">
                     <i class="fas fa-user"></i> Your Name
                 </label>
-                <input type="text" id="userName" placeholder="Enter your name" maxlength="20">
+                <input type="text" id="userName" placeholder="Enter your name" maxlength="20" autocomplete="off">
             </div>
 
+            <!-- Voice Preference -->
             <div class="setting-group">
                 <label for="userVoice">
                     <i class="fas fa-voice"></i> Preferred Voice
@@ -324,17 +414,18 @@
                 </select>
             </div>
 
+            <!-- English Level -->
             <div class="setting-group">
                 <label for="userLevel">
                     <i class="fas fa-graduation-cap"></i> English Level
                 </label>
                 <select id="userLevel">
-                    <option value="B1">📘 B1 (Beginner)</option>
-                    <option value="B2">📗 B2 (Intermediate)</option>
-                    <option value="C1">📕 C1 (Advanced)</option>
-                    <option value="C2">📙 C2 (Expert)</option>
+                    <option value="B1">📘 B1 (Beginner) - Slow speech</option>
+                    <option value="B2">📗 B2 (Intermediate) - Normal speech</option>
+                    <option value="C1">📕 C1 (Advanced) - Fast speech</option>
+                    <option value="C2">📙 C2 (Expert) - Native speed</option>
                 </select>
-                <small>This affects voice speed and clarity</small>
+                <small>This affects voice speed and clarity during gameplay</small>
             </div>
 
             <div class="modal-buttons">
@@ -345,6 +436,9 @@
         </div>
     </div>
 
+    <!-- ================================================================ -->
+    <!-- SECTION 7: JAVASCRIPT                                            -->
+    <!-- ================================================================ -->
     <script src="./scripts/game.js"></script>
 
 </body>

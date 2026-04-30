@@ -1,11 +1,32 @@
-// Game Configuration
+/**
+ * Telephone Game Challenge - Main Game Logic
+ * Version: 2.0
+ * Author: Swe Zin Ei
+ * Description: A browser-based telephone game with voice recognition, text-to-speech,
+ *              persistent storage, achievements, and real-time similarity scoring.
+ */
+
+// ================================================================
+// SECTION 1: GAME CONFIGURATION
+// ================================================================
+
+/**
+ * Game configuration object containing all static data
+ * - Categories: Word banks for different difficulty levels
+ * - Voice mapping: Browser-specific voice name mappings
+ * - Level settings: Speech rate adjustments for English proficiency levels
+ * - Certificates: Achievement definitions with colors and icons
+ */
 const gameConfig = {
     categories: {
         easy: {
             name: "Easy",
             words: [
                 "Sunshine", "Rainbow", "Butterfly", "Chocolate", "Pizza",
-                "Ocean", "Mountain", "Starlight", "Cupcake", "Dragonfly"
+                "Ocean", "Mountain", "Starlight", "Cupcake", "Dragonfly",
+                "Moonlight", "Strawberry", "Elephant", "Giraffe", "Dolphin",
+                "Castle", "Pirate", "Unicorn", "Fairy", "Robot",
+                "Firefly", "Raindrop", "Snowflake", "Butterfly", "Ladybug"
             ]
         },
         medium: {
@@ -15,7 +36,17 @@ const gameConfig = {
                 "She sells seashells by the seashore",
                 "Peter Piper picked a peck of pickled peppers",
                 "How much wood would a woodchuck chuck",
-                "I love eating ice cream on hot summer days"
+                "I love eating ice cream on hot summer days",
+                "The sun sets beautifully behind the mountains every evening",
+                "My grandmother makes the best chocolate chip cookies in the world",
+                "The cat chased the mouse all around the old wooden house",
+                "Learning a new language opens doors to different cultures",
+                "The concert was amazing and the crowd cheered loudly",
+                "A journey of a thousand miles begins with a single step",
+                "The early bird catches the worm before sunrise",
+                "Actions speak louder than words in every situation",
+                "The stars twinkled brightly in the dark night sky",
+                "Coffee is the best way to start a busy morning"
             ]
         },
         hard: {
@@ -23,7 +54,19 @@ const gameConfig = {
             sentences: [
                 "The discovery of penicillin revolutionized modern medicine and saved millions of lives",
                 "Artificial intelligence is transforming the way we live, work, and communicate with each other",
-                "The Great Wall of China is one of the seven wonders of the world and spans thousands of miles"
+                "The Great Wall of China is one of the seven wonders of the world and spans thousands of miles",
+                "Climate change poses an existential threat to our planet and future generations",
+                "The human brain contains approximately eighty six billion neurons connected by synapses",
+                "Shakespeare's writings have influenced English literature for over four centuries",
+                "The Industrial Revolution marked a major turning point in human history and society",
+                "Photosynthesis is the process by which plants convert sunlight into chemical energy",
+                "The Roman Empire fell due to a combination of economic, military, and political factors",
+                "Democracy originated in ancient Greece and has evolved significantly over time",
+                "The internet has fundamentally changed how we access and share information globally",
+                "Albert Einstein's theory of relativity revolutionized our understanding of physics",
+                "The Amazon rainforest produces twenty percent of the world's oxygen supply",
+                "Beethoven continued to compose masterpieces even after losing his hearing",
+                "The French Revolution inspired many other movements for equality and freedom"
             ]
         },
         funny: {
@@ -31,7 +74,19 @@ const gameConfig = {
             sentences: [
                 "My cat tried to catch the laser pointer and ended up doing a backflip off the couch",
                 "I accidentally put salt instead of sugar in my coffee and made the worst latte ever",
-                "My dog thinks he's a lap dog even though he weighs 80 pounds"
+                "My dog thinks he's a lap dog even though he weighs 80 pounds",
+                "I told my computer I needed a break and now it won't stop sending me vacation ads",
+                "The penguin walked into the library and asked for a book about fish",
+                "My alarm clock is my least favorite invention of all time",
+                "I finally got my act together but nobody wants to watch it",
+                "The best way to procrastinate is to plan how to stop procrastinating",
+                "I'm not lazy, I'm just on energy saving mode",
+                "My brain has two modes: asleep and panicking",
+                "I tried to be normal once, worst two minutes of my life",
+                "Does running late count as exercise? Asking for a friend",
+                "I'm not arguing, I'm just explaining why I'm right",
+                "The floor is lava and my shoes are not invited",
+                "I put my phone in airplane mode but it didn't grow wings"
             ]
         },
         movies: {
@@ -41,11 +96,25 @@ const gameConfig = {
                 "Here's looking at you, kid",
                 "I'm the king of the world!",
                 "To infinity and beyond!",
-                "You can't handle the truth!"
+                "You can't handle the truth!",
+                "I'll be back",
+                "Life is like a box of chocolates",
+                "You talking to me?",
+                "There's no place like home",
+                "I see dead people",
+                "Houston, we have a problem",
+                "My precious",
+                "Why so serious?",
+                "I'm gonna make him an offer he can't refuse",
+                "You had me at hello"
             ]
         }
     },
     
+    /**
+     * Voice mapping for cross-browser compatibility
+     * Maps preferred voice types to actual voice names in different browsers
+     */
     voiceMapping: {
         male: ['Google UK English Male', 'Microsoft David', 'Google US English Male'],
         female: ['Google UK English Female', 'Microsoft Susan', 'Google US English Female'],
@@ -54,6 +123,10 @@ const gameConfig = {
         oldMan: ['Microsoft David', 'Google UK English Male']
     },
     
+    /**
+     * Speech rate settings for different English proficiency levels
+     * B1: Beginner (slower) - C2: Expert (native speed)
+     */
     levelSettings: {
         B1: { rate: 0.8 },
         B2: { rate: 1.0 },
@@ -61,28 +134,39 @@ const gameConfig = {
         C2: { rate: 1.4 }
     },
     
+    /**
+     * Certificate definitions with unique colors for visual distinction
+     */
     certificates: [
-        { id: 'first_game', name: 'First Steps', icon: '🎮', description: 'Play your first game' },
-        { id: 'accuracy_80', name: 'Sharp Memory', icon: '🎯', description: 'Achieve 80% accuracy' },
-        { id: 'accuracy_90', name: 'Perfect Recall', icon: '🏆', description: 'Achieve 90% accuracy' },
-        { id: 'accuracy_100', name: 'Photographic Memory', icon: '👑', description: 'Achieve 100% accuracy' },
-        { id: 'games_5', name: 'Enthusiast', icon: '🌟', description: 'Play 5 games' },
-        { id: 'games_10', name: 'Veteran', icon: '⚡', description: 'Play 10 games' },
-        { id: 'games_25', name: 'Legend', icon: '🔥', description: 'Play 25 games' }
+        { id: 'first_game', name: 'First Steps', icon: '🎮', description: 'Play your first game', color: '#4cc9f0' },
+        { id: 'accuracy_80', name: 'Sharp Memory', icon: '🎯', description: 'Achieve 80% accuracy', color: '#90be6d' },
+        { id: 'accuracy_90', name: 'Perfect Recall', icon: '🏆', description: 'Achieve 90% accuracy', color: '#f9c74f' },
+        { id: 'accuracy_100', name: 'Photographic Memory', icon: '👑', description: 'Achieve 100% accuracy', color: '#f9844a' },
+        { id: 'games_5', name: 'Enthusiast', icon: '🌟', description: 'Play 5 games', color: '#4cc9f0' },
+        { id: 'games_10', name: 'Veteran', icon: '⚡', description: 'Play 10 games', color: '#7209b7' },
+        { id: 'games_25', name: 'Legend', icon: '🔥', description: 'Play 25 games', color: '#f72585' }
     ]
 };
 
-// Category preview data
+// Category preview data for the modal
 const categoryExamples = {
-    easy: "🌟 Sunshine, Rainbow, Butterfly, Chocolate",
+    easy: "🌟 Sunshine, Rainbow, Butterfly, Chocolate, Pizza, Ocean...",
     medium: "📝 The quick brown fox jumps over the lazy dog",
     hard: "🏆 The discovery of penicillin revolutionized modern medicine",
     funny: "😂 My cat tried to catch the laser pointer and did a backflip",
     movies: "🎬 May the Force be with you"
 };
 
-// Game State
+// ================================================================
+// SECTION 2: GAME STATE
+// ================================================================
+
+/**
+ * gameState object - Central state management for the entire game
+ * Contains user data, game progress, settings, and temporary state
+ */
 let gameState = {
+    // User profile data
     user: {
         name: '',
         voice: 'male',
@@ -97,10 +181,13 @@ let gameState = {
         gameHistory: []
     },
     
+    // Game configuration
     currentCategory: 'medium',
     players: 5,
     totalRounds: 5,
     memoryTime: 10,
+    
+    // Current game state
     currentRound: 1,
     currentPlayer: 1,
     score: 0,
@@ -109,39 +196,328 @@ let gameState = {
     gameActive: false,
     roundComplete: false,
     waitingForPlayerInput: false,
+    
+    // Message tracking
     originalMessage: '',
+    currentTargetMessage: '',
     chainHistory: [],
     accuracyHistory: [],
+    
+    // Settings
     soundEnabled: true,
     autoReadEnabled: true,
+    
+    // Voice recognition
     recognition: null,
     isListening: false,
     availableVoices: []
 };
 
-// DOM Elements
+// DOM Elements cache
 const elements = {};
 
-// ========== SAFE ELEMENT GETTER ==========
+// ================================================================
+// SECTION 3: SOUND EFFECTS
+// ================================================================
+
+/**
+ * Plays sound effects using Web Audio API
+ * @param {string} type - Type of sound ('correct', 'wrong', 'click', 'success', 'gameOver')
+ */
+function playSound(type) {
+    if (!gameState.soundEnabled) return;
+    
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        let frequency = 440;
+        let duration = 0.2;
+        
+        switch(type) {
+            case 'correct':
+                frequency = 523.25;  // C5 note
+                duration = 0.15;
+                break;
+            case 'wrong':
+                frequency = 349.23;  // F4 note
+                duration = 0.3;
+                break;
+            case 'click':
+                frequency = 659.25;  // E5 note
+                duration = 0.08;
+                break;
+            case 'success':
+                frequency = 659.25;
+                duration = 0.1;
+                setTimeout(() => {
+                    const osc2 = audioContext.createOscillator();
+                    const gain2 = audioContext.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioContext.destination);
+                    osc2.frequency.value = 783.99;  // G5 note
+                    gain2.gain.value = 0.3;
+                    osc2.start();
+                    osc2.stop(audioContext.currentTime + 0.15);
+                }, 100);
+                break;
+            case 'gameOver':
+                frequency = 261.63;  // C4 note
+                duration = 0.5;
+                break;
+            default:
+                frequency = 440;  // A4 note
+        }
+        
+        oscillator.frequency.value = frequency;
+        gainNode.gain.value = 0.3;
+        
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + duration);
+        
+        setTimeout(() => {
+            audioContext.close();
+        }, duration * 1000 + 100);
+    } catch(e) {
+        // Silent fail - sound effects are optional
+        console.log('Sound not played:', e);
+    }
+}
+
+// ================================================================
+// SECTION 4: AUTO-SAVE FUNCTIONALITY
+// ================================================================
+
+/**
+ * Saves current game state to localStorage for recovery
+ * Called after each player's turn
+ */
+function autoSaveGameState() {
+    const saveData = {
+        timestamp: new Date().toISOString(),
+        gameState: {
+            currentRound: gameState.currentRound,
+            currentPlayer: gameState.currentPlayer,
+            score: gameState.score,
+            gameActive: gameState.gameActive,
+            roundComplete: gameState.roundComplete,
+            waitingForPlayerInput: gameState.waitingForPlayerInput,
+            originalMessage: gameState.originalMessage,
+            currentTargetMessage: gameState.currentTargetMessage,
+            chainHistory: gameState.chainHistory,
+            accuracyHistory: gameState.accuracyHistory,
+            currentCategory: gameState.currentCategory
+        }
+    };
+    localStorage.setItem('telephoneGameAutoSave', JSON.stringify(saveData));
+}
+
+/**
+ * Loads auto-saved game state if available and from the same day
+ * @returns {boolean} True if save was loaded, false otherwise
+ */
+function loadAutoSave() {
+    const saved = localStorage.getItem('telephoneGameAutoSave');
+    if (saved) {
+        try {
+            const saveData = JSON.parse(saved);
+            const saveDate = new Date(saveData.timestamp);
+            const today = new Date();
+            const isToday = saveDate.toDateString() === today.toDateString();
+            
+            if (isToday && !gameState.gameActive && saveData.gameState.chainHistory.length > 0) {
+                if (confirm('You have an unfinished game from earlier. Do you want to continue where you left off?')) {
+                    Object.assign(gameState, saveData.gameState);
+                    
+                    if (elements.currentRound) elements.currentRound.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
+                    if (elements.score) elements.score.textContent = gameState.score;
+                    
+                    showNotification('🔄 Game restored! Continue playing.', 'success');
+                    return true;
+                }
+            }
+        } catch(e) {
+            console.error('Failed to load auto-save:', e);
+        }
+    }
+    return false;
+}
+
+/**
+ * Clears the auto-saved game state
+ */
+function clearAutoSave() {
+    localStorage.removeItem('telephoneGameAutoSave');
+}
+
+// ================================================================
+// SECTION 5: KEYBOARD SHORTCUTS
+// ================================================================
+
+/**
+ * Sets up keyboard shortcuts for efficient gameplay
+ * Shortcuts: Ctrl+Enter (submit), Space (speak), N (next), R (restart), S (start), Esc (close), ? (help)
+ */
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Ctrl + Enter or Cmd + Enter to submit
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            if (gameState.gameActive && gameState.waitingForPlayerInput) {
+                const input = elements.playerInput?.value.trim();
+                if (input) {
+                    processPlayerInput(input);
+                    playSound('click');
+                } else if (elements.voiceResult?.textContent.trim()) {
+                    processPlayerInput(elements.voiceResult.textContent.trim());
+                    playSound('click');
+                }
+            }
+        }
+        
+        // Spacebar to start listening (when voice tab is active)
+        if (e.key === ' ' || e.key === 'Space') {
+            if (elements.voiceInput && elements.voiceInput.style.display === 'block' && !e.target.matches('input, textarea')) {
+                e.preventDefault();
+                if (gameState.gameActive && gameState.waitingForPlayerInput && elements.startListeningBtn && !elements.startListeningBtn.disabled) {
+                    elements.startListeningBtn.click();
+                    playSound('click');
+                }
+            }
+        }
+        
+        // N key for Next Round
+        if (e.key === 'n' || e.key === 'N') {
+            if (!e.target.matches('input, textarea')) {
+                e.preventDefault();
+                if (elements.nextBtn && !elements.nextBtn.disabled) {
+                    elements.nextBtn.click();
+                    playSound('click');
+                    showNotification('⏩ Next Round', 'info');
+                }
+            }
+        }
+        
+        // R key to restart game
+        if (e.key === 'r' || e.key === 'R') {
+            if (!e.target.matches('input, textarea')) {
+                e.preventDefault();
+                if (confirm('Restart game?')) {
+                    resetGame();
+                    playSound('click');
+                }
+            }
+        }
+        
+        // S key to start game
+        if (e.key === 's' || e.key === 'S') {
+            if (!e.target.matches('input, textarea')) {
+                e.preventDefault();
+                if (elements.startBtn && !elements.startBtn.disabled) {
+                    elements.startBtn.click();
+                    playSound('click');
+                }
+            }
+        }
+        
+        // Escape to close modals
+        if (e.key === 'Escape') {
+            const modals = ['userModal', 'settingsModal', 'accountModal', 'gameOverModal', 'editNameModal', 'categoriesModal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (modal && modal.style.display === 'flex') {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    });
+    
+    // Show keyboard shortcut help with ? key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === '?' && !e.target.matches('input, textarea')) {
+            e.preventDefault();
+            showShortcutHelp();
+        }
+    });
+}
+
+/**
+ * Displays the keyboard shortcuts help modal
+ */
+function showShortcutHelp() {
+    // Remove existing help modal if present
+    const existingHelp = document.querySelector('.shortcut-help-modal');
+    if (existingHelp) existingHelp.remove();
+    
+    const helpDiv = document.createElement('div');
+    helpDiv.className = 'shortcut-help-modal';
+    helpDiv.innerHTML = `
+        <div class="shortcut-help-content">
+            <h3><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h3>
+            <ul>
+                <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> - Submit answer</li>
+                <li><kbd>Space</kbd> - Start speaking (voice tab)</li>
+                <li><kbd>N</kbd> - Next Round</li>
+                <li><kbd>R</kbd> - Restart game</li>
+                <li><kbd>S</kbd> - Start/Pause game</li>
+                <li><kbd>Esc</kbd> - Close modals</li>
+                <li><kbd>?</kbd> - Show this help</li>
+            </ul>
+            <p style="font-size: 12px; color: #888; margin-top: 10px;">💡 The message is only played once automatically. Listen carefully!</p>
+            <button class="close-help-btn">Close</button>
+        </div>
+    `;
+    document.body.appendChild(helpDiv);
+    
+    helpDiv.querySelector('.close-help-btn').addEventListener('click', () => {
+        helpDiv.remove();
+    });
+    
+    helpDiv.addEventListener('click', (e) => {
+        if (e.target === helpDiv) helpDiv.remove();
+    });
+}
+
+// ================================================================
+// SECTION 6: DOM ELEMENT INITIALIZATION
+// ================================================================
+
+/**
+ * Safe element getter with null check
+ * @param {string} id - Element ID
+ * @returns {HTMLElement|null} - DOM element or null
+ */
 function safeGetElement(id) {
-    const el = document.getElementById(id);
-    return el || null; // Return null if element doesn't exist
+    return document.getElementById(id);
 }
 
-// ========== SAFE QUERY SELECTOR ==========
+/**
+ * Safe query selector with null check
+ * @param {string} selector - CSS selector
+ * @returns {HTMLElement|null} - DOM element or null
+ */
 function safeQuerySelector(selector) {
-    const el = document.querySelector(selector);
-    return el || null;
+    return document.querySelector(selector);
 }
 
+/**
+ * Safe query selector all with fallback
+ * @param {string} selector - CSS selector
+ * @returns {NodeList|array} - NodeList or empty array
+ */
 function safeQuerySelectorAll(selector) {
     const els = document.querySelectorAll(selector);
     return els.length ? els : null;
 }
 
-// Initialize DOM elements with safety checks
+/**
+ * Initializes all DOM element references
+ */
 function initElements() {
-    // Game elements
     elements.playerCount = safeGetElement('playerCount');
     elements.currentRound = safeGetElement('currentRound');
     elements.score = safeGetElement('score');
@@ -165,20 +541,14 @@ function initElements() {
     elements.matchPercentage = safeGetElement('matchPercentage');
     elements.resultMessage = safeGetElement('resultMessage');
     elements.historyList = safeGetElement('historyList');
-    
-    // Voice & Level controls
     elements.mainVoiceSelect = safeGetElement('mainVoiceSelect');
     elements.mainLevelSelect = safeGetElement('mainLevelSelect');
     elements.voiceLevelStatus = safeGetElement('voiceLevelStatus');
-    
-    // User elements
     elements.userModal = safeGetElement('userModal');
     elements.userName = safeGetElement('userName');
     elements.userVoice = safeGetElement('userVoice');
     elements.userLevel = safeGetElement('userLevel');
     elements.saveUser = safeGetElement('saveUser');
-    
-    // Account elements
     elements.accountModal = safeGetElement('accountModal');
     elements.accountName = safeGetElement('accountName');
     elements.memberSince = safeGetElement('memberSince');
@@ -188,14 +558,10 @@ function initElements() {
     elements.certificatesGrid = safeGetElement('certificatesGrid');
     elements.editNameBtn = safeGetElement('editNameBtn');
     elements.closeAccountBtn = safeGetElement('closeAccountBtn');
-    
-    // Edit name modal
     elements.editNameModal = safeGetElement('editNameModal');
     elements.newUserName = safeGetElement('newUserName');
     elements.saveNewName = safeGetElement('saveNewName');
     elements.cancelEditName = safeGetElement('cancelEditName');
-    
-    // Settings modal
     elements.settingsModal = safeGetElement('settingsModal');
     elements.gameOverModal = safeGetElement('gameOverModal');
     elements.playerCountSelect = safeGetElement('playerCountSelect');
@@ -205,9 +571,6 @@ function initElements() {
     elements.autoReadToggle = safeGetElement('autoReadToggle');
     elements.saveSettings = safeGetElement('saveSettings');
     elements.closeSettings = safeGetElement('closeSettings');
-    
-    // TTS and Voice elements
-    elements.speakMessageBtn = safeGetElement('speakMessageBtn');
     elements.ttsStatus = safeGetElement('ttsStatus');
     elements.typeTab = safeGetElement('typeTab');
     elements.voiceTab = safeGetElement('voiceTab');
@@ -221,8 +584,8 @@ function initElements() {
     elements.matchResult = safeGetElement('matchResult');
     elements.useVoiceBtn = safeGetElement('useVoiceText');
     elements.tryAgainBtn = safeGetElement('tryAgainVoice');
-    
-    // Game over
+    elements.typeMatchFeedback = safeGetElement('typeMatchFeedback');
+    elements.typeMatchResult = safeGetElement('typeMatchResult');
     elements.finalRound = safeGetElement('finalRound');
     elements.finalScore = safeGetElement('finalScore');
     elements.finalAccuracy = safeGetElement('finalAccuracy');
@@ -231,12 +594,8 @@ function initElements() {
     elements.bestPhrase = safeGetElement('bestPhrase');
     elements.playAgainBtn = safeGetElement('playAgainBtn');
     elements.mainMenuBtn = safeGetElement('mainMenuBtn');
-    
-    // Navigation links
     elements.accountNavLink = safeGetElement('accountNavLink');
     elements.footerAccountLink = safeGetElement('footerAccountLink');
-    
-    // Category modal elements
     elements.categoriesToggleBtn = safeGetElement('categoriesToggleBtn');
     elements.categoriesModal = safeGetElement('categoriesModal');
     elements.closeCategoriesModal = safeGetElement('closeCategoriesModal');
@@ -245,14 +604,142 @@ function initElements() {
     elements.currentCategoryDisplay = safeGetElement('currentCategoryDisplay');
     elements.applyCategoryBtn = safeGetElement('applyCategoryBtn');
     elements.cancelCategoryBtn = safeGetElement('cancelCategoryBtn');
-    
-    // Clock elements
     elements.navTime = safeGetElement('navTime');
     elements.navDate = safeGetElement('navDate');
 }
 
-// ========== LOCAL STORAGE FUNCTIONS ==========
+// ================================================================
+// SECTION 7: UI RESET FUNCTIONS
+// ================================================================
 
+/**
+ * Resets all voice input UI elements to default state
+ */
+function resetVoiceUI() {
+    if (elements.voiceResult) elements.voiceResult.textContent = '';
+    if (elements.voiceMatch) elements.voiceMatch.style.display = 'none';
+    if (elements.matchResult) {
+        elements.matchResult.textContent = '';
+        elements.matchResult.className = 'match-result';
+    }
+    if (elements.voiceStatus) {
+        elements.voiceStatus.textContent = 'Click "Start Speaking" and say the message';
+        elements.voiceStatus.style.color = '#666';
+    }
+    if (elements.startListeningBtn) {
+        elements.startListeningBtn.disabled = false;
+        elements.startListeningBtn.classList.remove('listening');
+    }
+    if (elements.stopListeningBtn) elements.stopListeningBtn.disabled = true;
+}
+
+/**
+ * Resets all type input UI elements to default state
+ */
+function resetTypeUI() {
+    if (elements.playerInput) {
+        elements.playerInput.value = '';
+        elements.playerInput.classList.remove('correct-input', 'good-input', 'wrong-input');
+    }
+    if (elements.typeMatchFeedback) {
+        elements.typeMatchFeedback.style.display = 'none';
+    }
+    if (elements.typeMatchResult) {
+        elements.typeMatchResult.textContent = '';
+        elements.typeMatchResult.className = '';
+    }
+}
+
+// ================================================================
+// SECTION 8: SIMILARITY CALCULATION (WORD MATCHING ALGORITHM)
+// ================================================================
+
+/**
+ * Calculates similarity between two strings using word-by-word matching
+ * This is a WORD-BASED algorithm, not character-based
+ * 
+ * @param {string} str1 - First string to compare
+ * @param {string} str2 - Second string to compare
+ * @returns {number} Similarity score between 0 and 1
+ * 
+ * Example:
+ * "The cat sat on the mat" vs "The cat sat on a mat"
+ * Word match: 5/6 words match = 0.83 (83%)
+ */
+function calculateSimilarity(str1, str2) {
+    // Normalize both strings
+    str1 = str1.toLowerCase().trim();
+    str2 = str2.toLowerCase().trim();
+    
+    // Quick win: identical strings
+    if (str1 === str2) return 1;
+    
+    // STEP 1: Split into words (not characters)
+    const words1 = str1.split(/\s+/);
+    const words2 = str2.split(/\s+/);
+    
+    // STEP 2: Greedy matching with used tracking to prevent double-counting
+    let matches = 0;
+    const used = new Array(words2.length).fill(false);
+    
+    // STEP 3: Compare each word from first sentence with words in second
+    words1.forEach(word1 => {
+        for (let i = 0; i < words2.length; i++) {
+            // Substring tolerance handles variations like "colour"/"color"
+            if (!used[i] && (words2[i].includes(word1) || word1.includes(words2[i]))) {
+                matches++;
+                used[i] = true;
+                break;
+            }
+        }
+    });
+    
+    // STEP 4: Normalize by total number of words (not characters)
+    const totalWords = Math.max(words1.length, words2.length);
+    return totalWords > 0 ? matches / totalWords : 0;
+}
+
+/**
+ * Displays type match feedback with visual indicators
+ * @param {string} inputText - User's typed input
+ * @param {string} targetText - Expected target message
+ */
+function showTypeMatchFeedback(inputText, targetText) {
+    if (!elements.typeMatchFeedback || !elements.typeMatchResult) return;
+    
+    const similarity = calculateSimilarity(inputText, targetText) * 100;
+    
+    let matchClass = '';
+    let matchMessage = '';
+    
+    if (similarity >= 80) {
+        matchClass = 'perfect';
+        matchMessage = `🎉 Perfect match! (${similarity.toFixed(0)}% similar)`;
+        if (elements.playerInput) elements.playerInput.classList.add('correct-input');
+        if (gameState.soundEnabled) playSound('correct');
+    } else if (similarity >= 50) {
+        matchClass = 'good';
+        matchMessage = `👍 Good match! (${similarity.toFixed(0)}% similar)`;
+        if (elements.playerInput) elements.playerInput.classList.add('good-input');
+    } else {
+        matchClass = 'poor';
+        matchMessage = `😅 Needs improvement (${similarity.toFixed(0)}% similar)`;
+        if (elements.playerInput) elements.playerInput.classList.add('wrong-input');
+        if (gameState.soundEnabled) playSound('wrong');
+    }
+    
+    elements.typeMatchResult.textContent = matchMessage;
+    elements.typeMatchResult.className = `match-result ${matchClass}`;
+    elements.typeMatchFeedback.style.display = 'block';
+}
+
+// ================================================================
+// SECTION 9: LOCALSTORAGE USER MANAGEMENT
+// ================================================================
+
+/**
+ * Saves user data to localStorage
+ */
 function saveUserToStorage() {
     const userData = {
         name: gameState.user.name,
@@ -271,6 +758,10 @@ function saveUserToStorage() {
     localStorage.setItem('telephoneGameUser', JSON.stringify(userData));
 }
 
+/**
+ * Loads user data from localStorage
+ * @returns {boolean} - True if user data was loaded, false otherwise
+ */
 function loadUserFromStorage() {
     const saved = localStorage.getItem('telephoneGameUser');
     if (saved) {
@@ -279,12 +770,16 @@ function loadUserFromStorage() {
             gameState.user = { ...gameState.user, ...userData };
             return true;
         } catch (e) {
+            console.error('Failed to load user data:', e);
             return false;
         }
     }
     return false;
 }
 
+/**
+ * Updates the account UI with current user data
+ */
 function updateAccountUI() {
     if (!gameState.user.registered || !gameState.user.name) return;
     
@@ -313,21 +808,60 @@ function updateAccountUI() {
     if (elements.mainLevelSelect) elements.mainLevelSelect.value = gameState.user.level;
 }
 
+// ================================================================
+// SECTION 10: CERTIFICATE SYSTEM
+// ================================================================
+
+/**
+ * Updates the certificates grid display with earned/locked status
+ */
 function updateCertificates() {
     if (!elements.certificatesGrid) return;
     
     const certificates = gameConfig.certificates;
     const earned = new Set(gameState.user.certificates || []);
     
+    // Color mapping for different certificate types
+    const certColors = {
+        'first_game': { main: '#4cc9f0', light: '#72d4f5', dark: '#2a9dcc' },
+        'accuracy_80': { main: '#90be6d', light: '#a8d08a', dark: '#6c9e4a' },
+        'accuracy_90': { main: '#f9c74f', light: '#fbd672', dark: '#e0a800' },
+        'accuracy_100': { main: '#f9844a', light: '#fba36e', dark: '#e05a1a' },
+        'games_5': { main: '#4cc9f0', light: '#72d4f5', dark: '#2a9dcc' },
+        'games_10': { main: '#7209b7', light: '#9b3dd4', dark: '#570793' },
+        'games_25': { main: '#f72585', light: '#f9579d', dark: '#d40d6e' }
+    };
+    
     let html = '';
     certificates.forEach(cert => {
         const isEarned = earned.has(cert.id);
+        const colors = certColors[cert.id] || { main: '#4cc9f0', light: '#72d4f5', dark: '#2a9dcc' };
+        
         html += `
-            <div class="certificate-card ${isEarned ? '' : 'locked'}">
-                <div class="certificate-icon">${cert.icon}</div>
-                <h4>${cert.name}</h4>
-                <p>${cert.description}</p>
-                <div class="certificate-badge">${isEarned ? '✓' : '🔒'}</div>
+            <div class="certificate-card ${isEarned ? 'earned' : 'locked'}" style="--cert-color: ${colors.main}; --cert-color-light: ${colors.light}; --cert-color-dark: ${colors.dark};">
+                <div class="certificate-top-bar" style="background: linear-gradient(90deg, ${colors.main}, ${colors.light});"></div>
+                <div class="certificate-inner">
+                    <div class="certificate-icon-box" style="background: linear-gradient(135deg, ${colors.main}, ${colors.dark});">
+                        <span class="certificate-icon-emoji">${cert.icon}</span>
+                    </div>
+                    <div class="certificate-info-box">
+                        <h4>${cert.name}</h4>
+                        <p>${cert.description}</p>
+                    </div>
+                    <div class="certificate-badge-box">
+                        ${isEarned ? 
+                            '<span class="earned-badge-modern"><i class="fas fa-check-circle"></i> EARNED</span>' : 
+                            '<span class="locked-badge-modern"><i class="fas fa-lock"></i> LOCKED</span>'}
+                    </div>
+                </div>
+                <div class="certificate-footer">
+                    <div class="certificate-date">
+                        <i class="fas ${isEarned ? 'fa-trophy' : 'fa-hourglass-half'}"></i>
+                        <span>${isEarned ? 'Achievement Unlocked' : 'Not yet earned'}</span>
+                    </div>
+                    ${isEarned ? '<i class="fas fa-star" style="color: #f9c74f; font-size: 0.8rem;"></i>' : ''}
+                </div>
+                <div class="certificate-shine"></div>
             </div>
         `;
     });
@@ -335,28 +869,40 @@ function updateCertificates() {
     elements.certificatesGrid.innerHTML = html;
 }
 
+/**
+ * Checks and awards certificates based on user achievements
+ */
 function checkCertificates() {
     const user = gameState.user;
     const earned = new Set(user.certificates || []);
+    let newCertEarned = false;
     
     if (user.gamesPlayed >= 1 && !earned.has('first_game')) {
         earned.add('first_game');
         showNotification('🎉 Certificate Earned: First Steps!', 'success');
+        playSound('success');
+        newCertEarned = true;
     }
     
     if (user.gamesPlayed >= 5 && !earned.has('games_5')) {
         earned.add('games_5');
         showNotification('🌟 Certificate Earned: Enthusiast!', 'success');
+        playSound('success');
+        newCertEarned = true;
     }
     
     if (user.gamesPlayed >= 10 && !earned.has('games_10')) {
         earned.add('games_10');
         showNotification('⚡ Certificate Earned: Veteran!', 'success');
+        playSound('success');
+        newCertEarned = true;
     }
     
     if (user.gamesPlayed >= 25 && !earned.has('games_25')) {
         earned.add('games_25');
         showNotification('🔥 Certificate Earned: Legend!', 'success');
+        playSound('success');
+        newCertEarned = true;
     }
     
     const history = user.gameHistory || [];
@@ -366,24 +912,39 @@ function checkCertificates() {
         if (maxAccuracy >= 80 && !earned.has('accuracy_80')) {
             earned.add('accuracy_80');
             showNotification('🎯 Certificate Earned: Sharp Memory!', 'success');
+            playSound('success');
+            newCertEarned = true;
         }
         if (maxAccuracy >= 90 && !earned.has('accuracy_90')) {
             earned.add('accuracy_90');
             showNotification('🏆 Certificate Earned: Perfect Recall!', 'success');
+            playSound('success');
+            newCertEarned = true;
         }
         if (maxAccuracy >= 100 && !earned.has('accuracy_100')) {
             earned.add('accuracy_100');
             showNotification('👑 Certificate Earned: Photographic Memory!', 'success');
+            playSound('success');
+            newCertEarned = true;
         }
     }
     
     user.certificates = Array.from(earned);
     saveUserToStorage();
-    updateCertificates();
+    
+    if (newCertEarned) {
+        updateCertificates();
+    }
 }
 
-// ========== VOICE FUNCTIONS ==========
+// ================================================================
+// SECTION 11: VOICE SYNTHESIS (TTS)
+// ================================================================
 
+/**
+ * Loads available voices from the browser
+ * @returns {Promise} - Resolves with available voices
+ */
 function loadVoices() {
     return new Promise((resolve) => {
         let voices = window.speechSynthesis.getVoices();
@@ -400,6 +961,10 @@ function loadVoices() {
     });
 }
 
+/**
+ * Finds the best matching voice based on user preference
+ * @returns {SpeechSynthesisVoice|null} - The selected voice or null
+ */
 function findBestVoice() {
     if (gameState.availableVoices.length === 0) return null;
     
@@ -416,6 +981,10 @@ function findBestVoice() {
     return gameState.availableVoices.find(v => v.lang.startsWith('en'));
 }
 
+/**
+ * Speaks text using text-to-speech (no callback)
+ * @param {string} text - Text to speak
+ */
 function speakText(text) {
     if (!('speechSynthesis' in window)) {
         if (elements.ttsStatus) elements.ttsStatus.textContent = 'Not supported';
@@ -440,20 +1009,69 @@ function speakText(text) {
     }
     
     utterance.onstart = () => {
-        if (elements.speakMessageBtn) elements.speakMessageBtn.classList.add('speaking');
         if (elements.ttsStatus) elements.ttsStatus.textContent = '🔊 Speaking...';
     };
     
     utterance.onend = () => {
-        if (elements.speakMessageBtn) elements.speakMessageBtn.classList.remove('speaking');
         if (elements.ttsStatus) elements.ttsStatus.textContent = '';
     };
     
     window.speechSynthesis.speak(utterance);
 }
 
+/**
+ * Speaks text with a callback after completion
+ * @param {string} text - Text to speak
+ * @param {function} callback - Function to call after speaking completes
+ */
+function speakTextWithCallback(text, callback) {
+    if (!('speechSynthesis' in window)) {
+        if (callback) callback();
+        return;
+    }
+    
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voice = findBestVoice();
+    if (voice) utterance.voice = voice;
+    
+    utterance.lang = 'en-US';
+    
+    const levelSettings = gameConfig.levelSettings[gameState.user.level] || gameConfig.levelSettings.B1;
+    utterance.rate = levelSettings.rate;
+    
+    if (gameState.user.voice === 'girl') utterance.pitch = 1.5;
+    else if (gameState.user.voice === 'oldWoman' || gameState.user.voice === 'oldMan') {
+        utterance.pitch = 0.8;
+        utterance.rate = utterance.rate * 0.9;
+    }
+    
+    utterance.onstart = () => {
+        if (elements.ttsStatus) elements.ttsStatus.textContent = '🔊 Speaking...';
+    };
+    
+    utterance.onend = () => {
+        if (elements.ttsStatus) elements.ttsStatus.textContent = '';
+        if (callback) callback();
+    };
+    
+    utterance.onerror = () => {
+        if (callback) callback();
+    };
+    
+    window.speechSynthesis.speak(utterance);
+}
+
+// ================================================================
+// SECTION 12: SPEECH RECOGNITION (VOICE INPUT)
+// ================================================================
+
+/**
+ * Initializes speech recognition for voice input
+ */
 function initSpeechRecognition() {
-    if (!elements.startListeningBtn) return; // Only init if on game page
+    if (!elements.startListeningBtn) return;
     
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         if (elements.voiceStatus) elements.voiceStatus.textContent = 'Voice recognition not supported';
@@ -500,20 +1118,22 @@ function initSpeechRecognition() {
             elements.voiceStatus.style.color = '#666';
         }
         
-        // Show match check if we have a result
         if (elements.voiceResult && elements.voiceResult.textContent.trim()) {
             checkVoiceMatch();
         }
     };
 }
 
+/**
+ * Checks voice match similarity and displays feedback
+ */
 function checkVoiceMatch() {
-    if (!elements.voiceResult || !elements.displayText) return;
+    if (!elements.voiceResult || !gameState.currentTargetMessage) return;
     
     const spoken = elements.voiceResult.textContent.trim().toLowerCase();
-    const target = elements.displayText.textContent.toLowerCase();
+    const target = gameState.currentTargetMessage.toLowerCase();
     
-    if (spoken && target && target !== 'the message will appear here' && target !== '🔊 listen carefully...') {
+    if (spoken && target) {
         const similarity = calculateSimilarity(spoken, target) * 100;
         
         let matchClass = '';
@@ -522,12 +1142,14 @@ function checkVoiceMatch() {
         if (similarity >= 80) {
             matchClass = 'perfect';
             matchMessage = `🎉 Perfect match! (${similarity.toFixed(0)}% similar)`;
+            if (gameState.soundEnabled) playSound('correct');
         } else if (similarity >= 50) {
             matchClass = 'good';
             matchMessage = `👍 Good match! (${similarity.toFixed(0)}% similar)`;
         } else {
             matchClass = 'poor';
             matchMessage = `😅 Needs improvement (${similarity.toFixed(0)}% similar)`;
+            if (gameState.soundEnabled) playSound('wrong');
         }
         
         if (elements.matchResult) {
@@ -538,34 +1160,13 @@ function checkVoiceMatch() {
     }
 }
 
-// ========== GAME FUNCTIONS ==========
+// ================================================================
+// SECTION 13: GAME VISUALIZATION
+// ================================================================
 
-function calculateSimilarity(str1, str2) {
-    str1 = str1.toLowerCase().trim();
-    str2 = str2.toLowerCase().trim();
-    
-    if (str1 === str2) return 1;
-    
-    const words1 = str1.split(/\s+/);
-    const words2 = str2.split(/\s+/);
-    
-    let matches = 0;
-    const used = new Array(words2.length).fill(false);
-    
-    words1.forEach(word1 => {
-        for (let i = 0; i < words2.length; i++) {
-            if (!used[i] && (words2[i].includes(word1) || word1.includes(words2[i]))) {
-                matches++;
-                used[i] = true;
-                break;
-            }
-        }
-    });
-    
-    const totalWords = Math.max(words1.length, words2.length);
-    return totalWords > 0 ? matches / totalWords : 0;
-}
-
+/**
+ * Generates the player chain visualization
+ */
 function generatePlayerChain() {
     if (!elements.playerChain) return;
     
@@ -591,6 +1192,9 @@ function generatePlayerChain() {
     }
 }
 
+/**
+ * Updates the player chain visualization based on current player
+ */
 function updatePlayerChain() {
     const players = document.querySelectorAll('.player');
     if (!players.length) return;
@@ -617,6 +1221,13 @@ function updatePlayerChain() {
     });
 }
 
+// ================================================================
+// SECTION 14: GAME CORE LOGIC
+// ================================================================
+
+/**
+ * Generates a random message based on current category
+ */
 function generateMessage() {
     const category = gameConfig.categories[gameState.currentCategory];
     
@@ -632,6 +1243,9 @@ function generateMessage() {
     gameState.roundComplete = false;
 }
 
+/**
+ * Updates button states based on game status
+ */
 function updateButtonStates() {
     if (!elements.startBtn || !elements.nextBtn) return;
     
@@ -654,6 +1268,9 @@ function updateButtonStates() {
     }
 }
 
+/**
+ * Starts or pauses the game
+ */
 function startGame() {
     if (!elements.userModal || !elements.startBtn || !elements.nextBtn) return;
     
@@ -663,15 +1280,14 @@ function startGame() {
     }
     
     if (gameState.gameActive) {
-        // Pause game
         clearInterval(gameState.timer);
         gameState.gameActive = false;
         gameState.waitingForPlayerInput = false;
         updateButtonStates();
+        playSound('click');
         return;
     }
     
-    // Start or resume game
     if (gameState.currentRound === 1 && !gameState.gameActive && !gameState.roundComplete) {
         gameState.score = 0;
         gameState.currentPlayer = 1;
@@ -680,15 +1296,24 @@ function startGame() {
         if (elements.resultsBox) elements.resultsBox.style.display = 'none';
         if (elements.currentTurn) elements.currentTurn.style.display = 'block';
         gameState.roundComplete = false;
+        clearAutoSave();
     }
     
     gameState.gameActive = true;
     gameState.waitingForPlayerInput = true;
     elements.nextBtn.disabled = true;
     updateButtonStates();
+    
+    resetVoiceUI();
+    resetTypeUI();
+    playSound('click');
+    
     startPlayerTurn();
 }
 
+/**
+ * Starts a player's turn - handles message display and audio playback
+ */
 function startPlayerTurn() {
     if (!gameState.gameActive || !gameState.waitingForPlayerInput) return;
     if (!elements.currentPlayer || !elements.instruction || !elements.displayText) return;
@@ -697,44 +1322,111 @@ function startPlayerTurn() {
     elements.currentPlayer.textContent = `Player ${gameState.currentPlayer}`;
     updatePlayerChain();
     
+    resetVoiceUI();
+    resetTypeUI();
+    
+    if (elements.playerInput) elements.playerInput.value = '';
+    
     let messageToShow;
     if (gameState.currentPlayer === 1) {
+        // FIRST PLAYER OF EACH ROUND - gets the original message
         messageToShow = gameState.originalMessage;
         elements.instruction.textContent = `${gameState.user.name}, remember this carefully!`;
     } else {
+        // OTHER PLAYERS - get the previous player's message
         const prevMessage = gameState.chainHistory[gameState.currentPlayer - 1]?.message || gameState.originalMessage;
         messageToShow = prevMessage;
         elements.instruction.textContent = `Player ${gameState.currentPlayer - 1} said:`;
     }
     
-    // Show/hide text based on round and player
-    if (gameState.currentRound === 1 && gameState.currentPlayer === 1) {
-        // First round, first player - show message
+    gameState.currentTargetMessage = messageToShow;
+    
+    // ========== FIX: Show message for FIRST PLAYER of EVERY ROUND ==========
+    if (gameState.currentPlayer === 1) {
+        // FIRST PLAYER OF ANY ROUND - SHOW the message on screen
         elements.displayText.textContent = messageToShow;
         elements.displayText.style.opacity = '1';
         elements.displayText.style.display = 'flex';
         
-        // Auto-read for first player
+        // Hide the message after memoryTime seconds
+        setTimeout(() => {
+            if (elements.displayText && gameState.currentPlayer === 1) {
+                elements.displayText.textContent = '🔊 Message hidden... Listen carefully!';
+                elements.displayText.style.opacity = '0.3';
+            }
+        }, gameState.memoryTime * 1000);
+        
+        // Auto-read the message
         if (gameState.autoReadEnabled) {
-            setTimeout(() => speakText(messageToShow), 500);
+            gameState.waitingForPlayerInput = false;
+            if (elements.startListeningBtn) elements.startListeningBtn.disabled = true;
+            if (elements.submitBtn) elements.submitBtn.disabled = true;
+            if (elements.playerInput) elements.playerInput.disabled = true;
+            
+            if (elements.voiceStatus) {
+                elements.voiceStatus.textContent = '🔊 Message playing... Wait before speaking';
+                elements.voiceStatus.style.color = '#f8961e';
+            }
+            
+            speakTextWithCallback(messageToShow, () => {
+                gameState.waitingForPlayerInput = true;
+                if (elements.startListeningBtn) elements.startListeningBtn.disabled = false;
+                if (elements.submitBtn) elements.submitBtn.disabled = false;
+                if (elements.playerInput) elements.playerInput.disabled = false;
+                
+                if (elements.voiceStatus) {
+                    elements.voiceStatus.textContent = 'Click "Start Speaking" and say the message';
+                    elements.voiceStatus.style.color = '#666';
+                }
+                
+                if (gameState.timer) clearInterval(gameState.timer);
+                startTimer();
+            });
+        } else {
+            gameState.waitingForPlayerInput = true;
+            if (elements.startListeningBtn) elements.startListeningBtn.disabled = false;
+            if (elements.submitBtn) elements.submitBtn.disabled = false;
+            if (elements.playerInput) elements.playerInput.disabled = false;
+            
+            if (gameState.timer) clearInterval(gameState.timer);
+            startTimer();
         }
     } else {
-        // All other rounds/players - NO TEXT AT ALL
-        elements.displayText.textContent = '🔊 Listen carefully...';
+        // OTHER PLAYERS (2, 3, 4, 5) - NO TEXT, ONLY AUDIO
+        elements.displayText.textContent = '🔊 Listen carefully to the voice...';
         elements.displayText.style.opacity = '0.3';
+        elements.displayText.style.display = 'flex';
         
-        // Auto-read the message for all players
-        if (gameState.autoReadEnabled) {
-            setTimeout(() => speakText(messageToShow), 500);
+        gameState.waitingForPlayerInput = false;
+        if (elements.startListeningBtn) elements.startListeningBtn.disabled = true;
+        if (elements.submitBtn) elements.submitBtn.disabled = true;
+        if (elements.playerInput) elements.playerInput.disabled = true;
+        
+        if (elements.voiceStatus) {
+            elements.voiceStatus.textContent = '🔊 Message playing... Wait before speaking';
+            elements.voiceStatus.style.color = '#f8961e';
         }
+        
+        speakTextWithCallback(messageToShow, () => {
+            gameState.waitingForPlayerInput = true;
+            if (elements.startListeningBtn) elements.startListeningBtn.disabled = false;
+            if (elements.submitBtn) elements.submitBtn.disabled = false;
+            if (elements.playerInput) elements.playerInput.disabled = false;
+            
+            if (elements.voiceStatus) {
+                elements.voiceStatus.textContent = 'Click "Start Speaking" and say the message';
+                elements.voiceStatus.style.color = '#666';
+            }
+            
+            if (gameState.timer) clearInterval(gameState.timer);
+            startTimer();
+        });
     }
-    
-    // Clear any existing timer
-    if (gameState.timer) clearInterval(gameState.timer);
-    
-    startTimer();
 }
 
+/**
+ * Starts the response timer for the current player
+ */
 function startTimer() {
     if (!elements.timer || !elements.messageTimeLeft || !elements.messageTimer) return;
     
@@ -752,6 +1444,7 @@ function startTimer() {
         const percentage = (remaining / totalTime) * 100;
         elements.messageTimer.style.width = `${percentage}%`;
         
+        // Color coding for urgency
         if (gameState.timeLeft <= 3) {
             elements.messageTimer.style.background = 'linear-gradient(to right, #ef476f, #f72585)';
         } else if (gameState.timeLeft <= 7) {
@@ -760,31 +1453,31 @@ function startTimer() {
             elements.messageTimer.style.background = 'linear-gradient(to right, #4cc9f0, #2ec4b6)';
         }
         
-        // For first round only, fade the text
-        if (gameState.currentRound === 1 && gameState.currentPlayer === 1 && elements.displayText) {
-            if (remaining <= 2000) {
-                elements.displayText.style.opacity = '0.3';
-            }
-        }
-        
-        // When timer reaches zero
         if (remaining <= 0) {
             clearInterval(gameState.timer);
             if (elements.instruction) {
                 elements.instruction.textContent = 'Time is up! Please type or speak what you remember...';
             }
-            // DON'T auto-submit - wait for user input
+            if (gameState.soundEnabled) playSound('wrong');
         }
     }, 100);
 }
 
+/**
+ * Processes player input (typed or spoken)
+ * @param {string} input - The player's input
+ */
 function processPlayerInput(input) {
     if (!gameState.gameActive || !gameState.waitingForPlayerInput) return;
     
     const trimmedInput = input.trim();
     if (!trimmedInput) return;
     
-    // Stop the timer
+    // Show type feedback before processing
+    if (elements.typeMatchFeedback && gameState.currentTargetMessage) {
+        showTypeMatchFeedback(trimmedInput, gameState.currentTargetMessage);
+    }
+    
     clearInterval(gameState.timer);
     
     gameState.chainHistory.push({
@@ -803,22 +1496,35 @@ function processPlayerInput(input) {
         
         gameState.score += Math.floor(accuracy * 100);
         if (elements.score) elements.score.textContent = gameState.score;
+        
+        if (gameState.soundEnabled) {
+            if (accuracy >= 0.8) playSound('correct');
+            else if (accuracy < 0.5) playSound('wrong');
+        }
     }
+    
+    // Auto-save progress
+    autoSaveGameState();
     
     if (gameState.currentPlayer < gameState.players) {
         gameState.currentPlayer++;
         startPlayerTurn();
     } else {
-        // All players have had their turn
         gameState.waitingForPlayerInput = false;
         endRound();
     }
     
     if (elements.playerInput) elements.playerInput.value = '';
-    if (elements.voiceResult) elements.voiceResult.textContent = '';
-    if (elements.voiceMatch) elements.voiceMatch.style.display = 'none';
+    resetVoiceUI();
 }
 
+// ================================================================
+// SECTION 15: ROUND AND GAME MANAGEMENT
+// ================================================================
+
+/**
+ * Ends the current round and shows results
+ */
 function endRound() {
     clearInterval(gameState.timer);
     gameState.gameActive = false;
@@ -827,6 +1533,9 @@ function endRound() {
     
     showResults();
     addToHistory();
+    
+    resetVoiceUI();
+    resetTypeUI();
     
     if (gameState.currentRound >= gameState.totalRounds) {
         if (elements.startBtn) elements.startBtn.style.display = 'none';
@@ -840,6 +1549,9 @@ function endRound() {
     }
 }
 
+/**
+ * Displays round results
+ */
 function showResults() {
     if (!elements.finalOriginal || !elements.finalResult || !elements.matchPercentage || 
         !elements.resultMessage || !elements.resultsBox || !elements.currentTurn) return;
@@ -856,12 +1568,14 @@ function showResults() {
     if (accuracy >= 80) {
         message = '🎉 Excellent! The message survived!';
         messageClass = 'success';
+        if (gameState.soundEnabled) playSound('success');
     } else if (accuracy >= 50) {
         message = '👍 Good job! Some words survived!';
         messageClass = 'good';
     } else {
         message = '😂 Completely transformed!';
         messageClass = 'poor';
+        if (gameState.soundEnabled) playSound('gameOver');
     }
     
     elements.resultMessage.textContent = message;
@@ -871,6 +1585,9 @@ function showResults() {
     elements.currentTurn.style.display = 'none';
 }
 
+/**
+ * Adds round results to game history sidebar
+ */
 function addToHistory() {
     if (!elements.historyList) return;
     
@@ -895,6 +1612,9 @@ function addToHistory() {
     elements.historyList.prepend(historyItem);
 }
 
+/**
+ * Advances to the next round
+ */
 function nextRound() {
     if (!elements.startBtn || !elements.nextBtn || !elements.currentRound) return;
     
@@ -917,10 +1637,17 @@ function nextRound() {
     elements.startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
     elements.nextBtn.disabled = true;
     
+    resetVoiceUI();
+    resetTypeUI();
+    playSound('click');
+    
     generateMessage();
     startPlayerTurn();
 }
 
+/**
+ * Ends the game and shows final statistics
+ */
 function endGame() {
     if (!elements.finalRound || !elements.finalScore || !elements.finalAccuracy || 
         !elements.gameOverTitle || !elements.gameOverMessage || !elements.bestPhrase || 
@@ -939,7 +1666,6 @@ function endGame() {
     elements.gameOverMessage.textContent = `${gameState.user.name}, you scored ${gameState.score} points!`;
     elements.bestPhrase.textContent = gameState.originalMessage;
     
-    // Save game to history
     const gameRecord = {
         date: new Date().toISOString(),
         rounds: gameState.currentRound,
@@ -951,7 +1677,6 @@ function endGame() {
     if (!gameState.user.gameHistory) gameState.user.gameHistory = [];
     gameState.user.gameHistory.push(gameRecord);
     
-    // Update user stats
     gameState.user.gamesPlayed++;
     gameState.user.totalScore += gameState.score;
     gameState.user.totalRoundsPlayed += gameState.currentRound;
@@ -963,17 +1688,25 @@ function endGame() {
     checkCertificates();
     saveUserToStorage();
     updateAccountUI();
+    clearAutoSave();
     
     elements.gameOverModal.style.display = 'flex';
     
-    // Reset for next game
     if (elements.startBtn) {
         elements.startBtn.style.display = 'inline-flex';
         elements.startBtn.innerHTML = '<i class="fas fa-play"></i> Start Game';
     }
     if (elements.nextBtn) elements.nextBtn.disabled = true;
+    
+    resetVoiceUI();
+    resetTypeUI();
+    
+    if (gameState.soundEnabled) playSound('gameOver');
 }
 
+/**
+ * Resets the game completely
+ */
 function resetGame() {
     clearInterval(gameState.timer);
     
@@ -985,6 +1718,7 @@ function resetGame() {
     gameState.waitingForPlayerInput = false;
     gameState.chainHistory = [];
     gameState.accuracyHistory = [];
+    gameState.currentTargetMessage = '';
     
     if (elements.currentRound) {
         elements.currentRound.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
@@ -1008,35 +1742,51 @@ function resetGame() {
         elements.displayText.textContent = 'The message will appear here';
         elements.displayText.style.opacity = '1';
     }
-    if (elements.playerInput) elements.playerInput.value = '';
-    if (elements.voiceResult) elements.voiceResult.textContent = '';
-    if (elements.voiceMatch) elements.voiceMatch.style.display = 'none';
+    
+    resetVoiceUI();
+    resetTypeUI();
+    clearAutoSave();
+    playSound('click');
     
     if (elements.historyList) {
         elements.historyList.innerHTML = '<div class="empty-history">No games played yet. Start playing!</div>';
     }
 }
 
+// ================================================================
+// SECTION 16: SETTINGS MANAGEMENT
+// ================================================================
+
+/**
+ * Loads game settings from localStorage
+ */
 function loadSettings() {
     const saved = localStorage.getItem('telephoneGameSettings');
     if (saved) {
-        const settings = JSON.parse(saved);
-        gameState.players = settings.players || 5;
-        gameState.totalRounds = settings.rounds || 5;
-        gameState.memoryTime = settings.timeLimit || 10;
-        gameState.soundEnabled = settings.soundEnabled !== false;
-        gameState.autoReadEnabled = settings.autoReadEnabled !== false;
-        
-        if (elements.playerCountSelect) elements.playerCountSelect.value = gameState.players;
-        if (elements.roundCountSelect) elements.roundCountSelect.value = gameState.totalRounds;
-        if (elements.timeLimitSelect) elements.timeLimitSelect.value = gameState.memoryTime;
-        if (elements.soundToggle) elements.soundToggle.checked = gameState.soundEnabled;
-        if (elements.autoReadToggle) elements.autoReadToggle.checked = gameState.autoReadEnabled;
-        if (elements.playerCount) elements.playerCount.textContent = gameState.players;
-        if (elements.currentRound) elements.currentRound.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
+        try {
+            const settings = JSON.parse(saved);
+            gameState.players = settings.players || 5;
+            gameState.totalRounds = settings.rounds || 5;
+            gameState.memoryTime = settings.timeLimit || 10;
+            gameState.soundEnabled = settings.soundEnabled !== false;
+            gameState.autoReadEnabled = settings.autoReadEnabled !== false;
+            
+            if (elements.playerCountSelect) elements.playerCountSelect.value = gameState.players;
+            if (elements.roundCountSelect) elements.roundCountSelect.value = gameState.totalRounds;
+            if (elements.timeLimitSelect) elements.timeLimitSelect.value = gameState.memoryTime;
+            if (elements.soundToggle) elements.soundToggle.checked = gameState.soundEnabled;
+            if (elements.autoReadToggle) elements.autoReadToggle.checked = gameState.autoReadEnabled;
+            if (elements.playerCount) elements.playerCount.textContent = gameState.players;
+            if (elements.currentRound) elements.currentRound.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
+        } catch(e) {
+            console.error('Failed to load settings:', e);
+        }
     }
 }
 
+/**
+ * Saves game settings to localStorage
+ */
 function saveSettings() {
     const settings = {
         players: parseInt(elements.playerCountSelect?.value || 5),
@@ -1062,48 +1812,48 @@ function saveSettings() {
     
     if (elements.settingsModal) elements.settingsModal.style.display = 'none';
     showNotification('Settings saved!', 'success');
+    playSound('click');
 }
 
-// ========== CATEGORY MODAL FUNCTIONS ==========
+// ================================================================
+// SECTION 17: CATEGORY MANAGEMENT
+// ================================================================
 
+/**
+ * Initializes the category modal and its event listeners
+ */
 function initCategoryModal() {
-    // Open modal
     if (elements.categoriesToggleBtn && elements.categoriesModal) {
         elements.categoriesToggleBtn.addEventListener('click', () => {
             openCategoryModal();
+            playSound('click');
         });
     }
     
-    // Close modal with X button
     if (elements.closeCategoriesModal && elements.categoriesModal) {
         elements.closeCategoriesModal.addEventListener('click', () => {
             closeCategoryModal();
         });
     }
     
-    // Close modal with Cancel button
     if (elements.cancelCategoryBtn && elements.categoriesModal) {
         elements.cancelCategoryBtn.addEventListener('click', () => {
             closeCategoryModal();
         });
     }
     
-    // Category card click
     if (elements.categoryCards) {
         elements.categoryCards.forEach(card => {
             card.addEventListener('click', () => {
-                // Remove active class from all cards
                 elements.categoryCards.forEach(c => c.classList.remove('active'));
-                // Add active class to clicked card
                 card.classList.add('active');
-                // Update preview
                 const category = card.dataset.category;
                 updateCategoryPreview(category);
+                playSound('click');
             });
         });
     }
     
-    // Apply category button
     if (elements.applyCategoryBtn && elements.categoriesModal) {
         elements.applyCategoryBtn.addEventListener('click', () => {
             const activeCard = document.querySelector('.category-card.active');
@@ -1112,10 +1862,10 @@ function initCategoryModal() {
                 applyCategory(category);
             }
             closeCategoryModal();
+            playSound('success');
         });
     }
     
-    // Close modal when clicking outside
     window.addEventListener('click', (e) => {
         if (elements.categoriesModal && e.target === elements.categoriesModal) {
             closeCategoryModal();
@@ -1123,11 +1873,12 @@ function initCategoryModal() {
     });
 }
 
-// Open category modal
+/**
+ * Opens the category selection modal
+ */
 function openCategoryModal() {
     if (!elements.categoriesModal || !elements.categoryCards) return;
     
-    // Set current category as active
     elements.categoryCards.forEach(card => {
         if (card.dataset.category === gameState.currentCategory) {
             card.classList.add('active');
@@ -1136,33 +1887,37 @@ function openCategoryModal() {
         }
     });
     
-    // Update preview
     updateCategoryPreview(gameState.currentCategory);
-    
-    // Show modal
     elements.categoriesModal.style.display = 'flex';
 }
 
-// Close category modal
+/**
+ * Closes the category selection modal
+ */
 function closeCategoryModal() {
     if (elements.categoriesModal) {
         elements.categoriesModal.style.display = 'none';
     }
 }
 
-// Update category preview
+/**
+ * Updates the category preview message
+ * @param {string} category - The selected category
+ */
 function updateCategoryPreview(category) {
     if (elements.previewMessage) {
         elements.previewMessage.textContent = categoryExamples[category] || 'Select a category to see example';
     }
 }
 
-// Apply selected category
+/**
+ * Applies the selected category to the game
+ * @param {string} category - The category to apply
+ */
 function applyCategory(category) {
     if (category && gameState.currentCategory !== category) {
         gameState.currentCategory = category;
         
-        // Update display
         if (elements.currentCategoryDisplay) {
             const categoryNames = {
                 easy: 'Easy',
@@ -1174,10 +1929,8 @@ function applyCategory(category) {
             elements.currentCategoryDisplay.textContent = categoryNames[category] || category;
         }
         
-        // Show notification
         showNotification(`Category changed to ${categoryNames[category]}`, 'success');
         
-        // If game is not active, generate a preview message
         if (!gameState.gameActive && elements.displayText) {
             const categoryData = gameConfig.categories[category];
             let previewMsg;
@@ -1191,10 +1944,14 @@ function applyCategory(category) {
     }
 }
 
-// ========== VOICE/LEVEL UPDATE ==========
+// ================================================================
+// SECTION 18: UI AND NOTIFICATION HELPERS
+// ================================================================
 
+/**
+ * Updates voice and level settings from UI
+ */
 function updateVoiceAndLevel() {
-    // Update from main selects
     if (elements.mainVoiceSelect) {
         gameState.user.voice = elements.mainVoiceSelect.value;
     }
@@ -1202,30 +1959,27 @@ function updateVoiceAndLevel() {
         gameState.user.level = elements.mainLevelSelect.value;
     }
     
-    // Save to storage
     saveUserToStorage();
     
-    // Show status message with animation
     if (elements.voiceLevelStatus) {
-        // Clear any existing timeout
         if (window.statusTimeout) {
             clearTimeout(window.statusTimeout);
         }
         
-        // Set the message
         elements.voiceLevelStatus.textContent = '✓ Settings saved';
         
-        // Hide after 2 seconds
         window.statusTimeout = setTimeout(() => {
             if (elements.voiceLevelStatus) {
                 elements.voiceLevelStatus.textContent = '';
             }
         }, 2000);
     }
+    playSound('click');
 }
 
-// ========== NAVIGATION FUNCTIONS ==========
-
+/**
+ * Sets up mobile menu toggle functionality
+ */
 function setupMobileMenu() {
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
@@ -1235,10 +1989,14 @@ function setupMobileMenu() {
             navMenu.classList.toggle('active');
             menuToggle.querySelector('i').className = 
                 navMenu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+            playSound('click');
         });
     }
 }
 
+/**
+ * Sets up dark mode theme toggle
+ */
 function setupThemeToggle() {
     const themeToggle = document.getElementById('themeToggle');
     let isDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -1254,13 +2012,18 @@ function setupThemeToggle() {
             document.body.classList.toggle('dark-mode');
             themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
             localStorage.setItem('darkMode', isDarkMode);
+            playSound('click');
         });
     }
 }
 
+/**
+ * Shows a notification toast message
+ * @param {string} message - Message to display
+ * @param {string} type - Type of notification ('success' or 'info')
+ */
 function showNotification(message, type = 'info') {
-    // Only show on pages that can display notifications properly
-    if (!document.querySelector('.game-area')) return; // Only on game pages
+    if (!document.querySelector('.game-area')) return;
     
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
@@ -1273,9 +2036,11 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
+/**
+ * Shows welcome back toast for returning users
+ */
 function showWelcomeBack() {
-    // Only show on pages that can display notifications properly
-    if (!document.querySelector('.game-area')) return; // Only on game pages
+    if (!document.querySelector('.game-area')) return;
     
     const toast = document.createElement('div');
     toast.className = 'welcome-toast';
@@ -1288,8 +2053,13 @@ function showWelcomeBack() {
     }, 3000);
 }
 
-// ========== EVENT LISTENERS ==========
+// ================================================================
+// SECTION 19: EVENT LISTENERS
+// ================================================================
 
+/**
+ * Sets up all event listeners for the game
+ */
 function setupEventListeners() {
     // User registration
     if (elements.saveUser && elements.userModal) {
@@ -1318,15 +2088,14 @@ function setupEventListeners() {
             elements.userModal.style.display = 'none';
             updateAccountUI();
             showWelcomeBack();
+            resetVoiceUI();
+            resetTypeUI();
+            playSound('success');
         });
     }
     
     // Account navigation
-    const accountLinks = [
-        elements.accountNavLink,
-        elements.footerAccountLink
-    ];
-    
+    const accountLinks = [elements.accountNavLink, elements.footerAccountLink];
     accountLinks.forEach(link => {
         if (link) {
             link.addEventListener('click', (e) => {
@@ -1337,16 +2106,18 @@ function setupEventListeners() {
                 } else {
                     if (elements.userModal) elements.userModal.style.display = 'flex';
                 }
+                playSound('click');
             });
         }
     });
     
-    // Edit name
+    // Edit name functionality
     if (elements.editNameBtn && elements.accountModal && elements.editNameModal) {
         elements.editNameBtn.addEventListener('click', () => {
             if (elements.newUserName) elements.newUserName.value = gameState.user.name;
             elements.accountModal.style.display = 'none';
             elements.editNameModal.style.display = 'flex';
+            playSound('click');
         });
     }
     
@@ -1359,6 +2130,7 @@ function setupEventListeners() {
                 updateAccountUI();
                 elements.editNameModal.style.display = 'none';
                 showNotification('Name updated!', 'success');
+                playSound('success');
             }
         });
     }
@@ -1366,58 +2138,70 @@ function setupEventListeners() {
     if (elements.cancelEditName && elements.editNameModal) {
         elements.cancelEditName.addEventListener('click', () => {
             elements.editNameModal.style.display = 'none';
+            playSound('click');
         });
     }
     
     if (elements.closeAccountBtn && elements.accountModal) {
         elements.closeAccountBtn.addEventListener('click', () => {
             elements.accountModal.style.display = 'none';
+            playSound('click');
         });
     }
     
-    // Voice/Level updates
+    // Voice and level changes
     if (elements.mainVoiceSelect) elements.mainVoiceSelect.addEventListener('change', updateVoiceAndLevel);
     if (elements.mainLevelSelect) elements.mainLevelSelect.addEventListener('change', updateVoiceAndLevel);
     
-    // Game controls - only if they exist
+    // Game control buttons
     if (elements.startBtn) elements.startBtn.addEventListener('click', startGame);
     if (elements.nextBtn) elements.nextBtn.addEventListener('click', nextRound);
     if (elements.resetBtn) elements.resetBtn.addEventListener('click', resetGame);
     
-    // Submit
+    // Submit button
     if (elements.submitBtn) {
         elements.submitBtn.addEventListener('click', () => {
             const input = elements.playerInput?.value.trim();
-            if (input) processPlayerInput(input);
+            if (input) {
+                processPlayerInput(input);
+                playSound('click');
+            }
         });
     }
     
+    // Player input field
     if (elements.playerInput) {
         elements.playerInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && gameState.gameActive && gameState.waitingForPlayerInput) {
                 const input = elements.playerInput.value.trim();
-                if (input) processPlayerInput(input);
+                if (input) {
+                    processPlayerInput(input);
+                    playSound('click');
+                }
+            }
+        });
+        
+        elements.playerInput.addEventListener('input', () => {
+            if (gameState.gameActive && gameState.waitingForPlayerInput && gameState.currentTargetMessage) {
+                const currentInput = elements.playerInput.value.trim();
+                if (currentInput.length > 0) {
+                    showTypeMatchFeedback(currentInput, gameState.currentTargetMessage);
+                } else if (elements.typeMatchFeedback) {
+                    elements.typeMatchFeedback.style.display = 'none';
+                }
             }
         });
     }
     
-    // TTS
-    if (elements.speakMessageBtn) {
-        elements.speakMessageBtn.addEventListener('click', () => {
-            const text = elements.displayText?.textContent;
-            if (text && text !== 'The message will appear here' && text !== '🔊 Listen carefully...') {
-                speakText(text);
-            }
-        });
-    }
-    
-    // Tabs
+    // Input tabs
     if (elements.typeTab && elements.voiceTab && elements.typeInput && elements.voiceInput) {
         elements.typeTab.addEventListener('click', () => {
             elements.typeTab.classList.add('active');
             elements.voiceTab.classList.remove('active');
             elements.typeInput.style.display = 'block';
             elements.voiceInput.style.display = 'none';
+            resetVoiceUI();
+            playSound('click');
         });
         
         elements.voiceTab.addEventListener('click', () => {
@@ -1425,47 +2209,54 @@ function setupEventListeners() {
             elements.typeTab.classList.remove('active');
             elements.typeInput.style.display = 'none';
             elements.voiceInput.style.display = 'block';
+            resetTypeUI();
+            playSound('click');
         });
     }
     
-    // Voice recognition
+    // Voice recognition buttons
     if (elements.startListeningBtn && elements.stopListeningBtn) {
         elements.startListeningBtn.addEventListener('click', () => {
             if (gameState.recognition && gameState.gameActive && gameState.waitingForPlayerInput) {
                 try { 
-                    gameState.recognition.start(); 
+                    gameState.recognition.start();
+                    playSound('click');
                 } catch (e) {}
             }
         });
         
         elements.stopListeningBtn.addEventListener('click', () => {
-            if (gameState.recognition && gameState.isListening) gameState.recognition.stop();
+            if (gameState.recognition && gameState.isListening) {
+                gameState.recognition.stop();
+                playSound('click');
+            }
         });
     }
     
+    // Voice action buttons
     if (elements.useVoiceBtn) {
         elements.useVoiceBtn.addEventListener('click', () => {
             const spoken = elements.voiceResult?.textContent;
             if (spoken) {
                 processPlayerInput(spoken);
-                if (elements.voiceMatch) elements.voiceMatch.style.display = 'none';
+                playSound('click');
             }
         });
     }
     
     if (elements.tryAgainBtn) {
         elements.tryAgainBtn.addEventListener('click', () => {
-            if (elements.voiceResult) elements.voiceResult.textContent = '';
-            if (elements.voiceMatch) elements.voiceMatch.style.display = 'none';
+            resetVoiceUI();
             if (gameState.recognition && gameState.gameActive && gameState.waitingForPlayerInput) {
                 try { 
-                    gameState.recognition.start(); 
+                    gameState.recognition.start();
+                    playSound('click');
                 } catch (e) {}
             }
         });
     }
     
-    // Settings
+    // Settings modal
     if (elements.settingsBtn && elements.settingsModal) {
         elements.settingsBtn.addEventListener('click', () => {
             if (elements.playerCountSelect) elements.playerCountSelect.value = gameState.players;
@@ -1475,6 +2266,7 @@ function setupEventListeners() {
             if (elements.autoReadToggle) elements.autoReadToggle.checked = gameState.autoReadEnabled;
             
             elements.settingsModal.style.display = 'flex';
+            playSound('click');
         });
     }
     
@@ -1485,20 +2277,23 @@ function setupEventListeners() {
     if (elements.closeSettings && elements.settingsModal) {
         elements.closeSettings.addEventListener('click', () => {
             elements.settingsModal.style.display = 'none';
+            playSound('click');
         });
     }
     
-    // Game over modal
+    // Game over modal buttons
     if (elements.playAgainBtn && elements.gameOverModal) {
         elements.playAgainBtn.addEventListener('click', () => {
             elements.gameOverModal.style.display = 'none';
             resetGame();
+            playSound('click');
         });
     }
     
     if (elements.mainMenuBtn && elements.gameOverModal) {
         elements.mainMenuBtn.addEventListener('click', () => {
             elements.gameOverModal.style.display = 'none';
+            playSound('click');
         });
     }
     
@@ -1523,9 +2318,14 @@ function setupEventListeners() {
     });
 }
 
-// ========== CLOCK FUNCTION - FIXED FOR ALL PAGES ==========
+// ================================================================
+// SECTION 20: CLOCK AND INITIALIZATION
+// ================================================================
+
+/**
+ * Updates the clock in the navigation bar
+ */
 function updateClock() {
-    // Only update if clock elements exist on the current page
     if (!elements.navTime && !elements.navDate) return;
     
     const now = new Date();
@@ -1544,15 +2344,22 @@ function updateClock() {
     }
 }
 
-// ========== INITIALIZATION ==========
-
+/**
+ * Initializes the game when DOM is loaded
+ */
 async function initGame() {
+    // Initialize DOM elements
     initElements();
+    
+    // Load available voices for TTS
     await loadVoices();
     
+    // Setup UI components
     setupMobileMenu();
     setupThemeToggle();
+    setupKeyboardShortcuts();
     
+    // Load user data from localStorage
     const hasUser = loadUserFromStorage();
     
     if (hasUser && gameState.user.registered) {
@@ -1560,22 +2367,27 @@ async function initGame() {
         updateAccountUI();
         checkCertificates();
         
-        // Only show welcome back on game pages
+        // Check for auto-saved game
+        loadAutoSave();
+        
         if (document.querySelector('.game-area')) {
             showWelcomeBack();
         }
     } else {
-        // Only show user modal on non-about pages and if it's the home page
+        // Show registration modal for new users (except on info/about pages)
         if (elements.userModal && !window.location.pathname.includes('about') && 
             !window.location.pathname.includes('gameinfo')) {
             elements.userModal.style.display = 'flex';
         }
     }
     
+    // Load game settings
     loadSettings();
+    
+    // Setup event listeners
     setupEventListeners();
     
-    // Only initialize game-specific UI if elements exist
+    // Initialize game UI components
     if (elements.playerChain) {
         generatePlayerChain();
     }
@@ -1584,12 +2396,11 @@ async function initGame() {
         initSpeechRecognition();
     }
     
-    // Initialize category modal if it exists
     if (elements.categoriesToggleBtn || elements.categoriesModal) {
         initCategoryModal();
     }
     
-    // Set initial category display if it exists
+    // Set initial category display
     if (elements.currentCategoryDisplay) {
         const categoryNames = {
             easy: 'Easy',
@@ -1601,12 +2412,25 @@ async function initGame() {
         elements.currentCategoryDisplay.textContent = categoryNames[gameState.currentCategory] || 'Easy';
     }
     
+    // Update button states
     updateButtonStates();
     
-    // Start clock (works on all pages now)
+    // Reset UI states
+    resetVoiceUI();
+    resetTypeUI();
+    
+    // Start clock
     setInterval(updateClock, 1000);
     updateClock();
+    
+    // Show keyboard shortcut help on first visit
+    setTimeout(() => {
+        if (!localStorage.getItem('shortcutsShown')) {
+            showShortcutHelp();
+            localStorage.setItem('shortcutsShown', 'true');
+        }
+    }, 1000);
 }
 
-// Start the game when DOM is loaded
+// Start the game when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initGame);

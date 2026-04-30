@@ -3,27 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telephone Game Challenge – About Us</title>
+    <meta name="description" content="About Telephone Game Challenge - Learn about the team, the project, and the technology behind this voice recognition memory game">
+    <meta name="author" content="Swe Zin Ei">
+    <meta name="keywords" content="about telephone game, project information, web technologies, voice recognition game">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Telephone Game Challenge - About Us</title>
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="./images/favicon.png">
 </head>
 <body>
+
+    <!-- ================================================================ -->
+    <!-- SECTION 1: NAVIGATION BAR                                        -->
+    <!-- ================================================================ -->
     <nav class="navbar">
         <div class="nav-container">
+            <!-- Brand Logo and Name -->
             <div class="nav-brand">
-                <a href="./index.html"><img src="./images/logo.png"/></a>
+                <a href="./index.html">
+                    <img src="./images/logo.png" alt="Telephone Game Logo">
+                </a>
                 <span>Telephone Game</span>
             </div>
+            
+            <!-- Navigation Links -->
             <div class="nav-menu" id="navMenu">
                 <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
                 <a href="gameinfo.html" class="nav-link"><i class="fas fa-info-circle"></i> Game Info</a>
                 <a href="about.html" class="nav-link active"><i class="fas fa-users"></i> About Us</a>
             </div>
+
+            <!-- Live Clock Display -->
             <div class="nav-clock">
-                <div class="clock-item"><i class="fas fa-clock"></i><span id="navTime">--:--:-- --</span></div>
-                <div class="clock-item"><i class="fas fa-calendar-alt"></i><span id="navDate">---</span></div>
+                <div class="clock-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="navTime">--:--:-- --</span>
+                </div>
+                <div class="clock-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="navDate">---</span>
+                </div>
             </div>
+            
+            <!-- Action Buttons -->
             <div class="nav-actions">
                 <button class="nav-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
                 <button class="nav-btn menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
@@ -34,55 +60,210 @@
         </div>
     </nav>
 
-    <!-- ========== ACCOUNT MODAL (minimal for functionality) ========== -->
+    <!-- ================================================================ -->
+    <!-- SECTION 2: ACCOUNT MODAL                                         -->
+    <!-- ================================================================ -->
     <div class="modal" id="accountModal">
         <div class="modal-content account-modal">
-            <div class="account-header"><i class="fas fa-user-circle account-avatar"></i><h2 id="accountName">Player Name</h2><p class="account-member-since">Member since <span id="memberSince">Just now</span></p></div>
-            <div class="account-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;">
-                <div class="account-stat-card"><i class="fas fa-gamepad"></i><div><h4>Games</h4><p id="gamesPlayed">0</p></div></div>
-                <div class="account-stat-card"><i class="fas fa-trophy"></i><div><h4>Best</h4><p id="bestScore">0</p></div></div>
-                <div class="account-stat-card"><i class="fas fa-chart-line"></i><div><h4>Avg</h4><p id="avgAccuracy">0%</p></div></div>
+            <div class="account-header">
+                <i class="fas fa-user-circle account-avatar"></i>
+                <h2 id="accountName">Player Name</h2>
+                <p class="account-member-since">Member since <span id="memberSince">Just now</span></p>
             </div>
-            <div class="account-actions"><button class="btn edit-name-btn" id="editNameBtn"><i class="fas fa-edit"></i> Change Name</button><button class="btn close-account-btn" id="closeAccountBtn"><i class="fas fa-times"></i> Close</button></div>
+            
+            <!-- User Statistics Cards -->
+            <div class="account-stats">
+                <div class="account-stat-card">
+                    <i class="fas fa-gamepad"></i>
+                    <div>
+                        <h4>Games Played</h4>
+                        <p id="gamesPlayed">0</p>
+                    </div>
+                </div>
+                <div class="account-stat-card">
+                    <i class="fas fa-trophy"></i>
+                    <div>
+                        <h4>Best Score</h4>
+                        <p id="bestScore">0</p>
+                    </div>
+                </div>
+                <div class="account-stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <h4>Avg Accuracy</h4>
+                        <p id="avgAccuracy">0%</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Certificates Section -->
+            <div class="account-certificates">
+                <h3><i class="fas fa-certificate"></i> Your Certificates</h3>
+                <div class="certificates-grid" id="certificatesGrid">
+                    <!-- Certificates loaded dynamically by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Account Action Buttons -->
+            <div class="account-actions">
+                <button class="btn edit-name-btn" id="editNameBtn">
+                    <i class="fas fa-edit"></i> Change Name
+                </button>
+                <button class="btn close-account-btn" id="closeAccountBtn">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
         </div>
     </div>
-    <div class="modal" id="editNameModal"><div class="modal-content"><h2>Edit name</h2><div class="setting-group"><label>New Name</label><input type="text" id="newUserName" maxlength="20"></div><div class="modal-buttons"><button class="btn save-btn" id="saveNewName">Save</button><button class="btn cancel-btn" id="cancelEditName">Cancel</button></div></div></div>
 
-    <!-- ========== MAIN ABOUT CONTENT – TWO RECTANGLES TOUCHING ========== -->
-    <main style="max-width:1200px;margin:2rem auto;padding:0 2rem;">
-        <div class="about-stack">
-            <!-- TOP RECTANGLE (two columns) -->
-            <div class="top-about">
-                <div class="top-text">
-                    <h2><i class="fas fa-quote-left"></i>Chinese Whisper</h2>
-                    <p>A dinner party game gone digital. We turned misheard whispers into a global voice‑recognition challenge.</p>
-                </div>
-                <div class="top-image">
-                    <!-- image placeholder with fallback (exactly as your previous code) -->
-                    <img src="./images/whisper.jpg" alt="whisper" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-phone-alt\' style=\'font-size:5rem;color:var(--accent-purple);\'></i><p style=\'margin-top:0.5rem;color:var(--text-mid);\'>whisper illustration</p>'">
-                </div>
+    <!-- ================================================================ -->
+    <!-- SECTION 3: EDIT NAME MODAL                                       -->
+    <!-- ================================================================ -->
+    <div class="modal" id="editNameModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-user-edit"></i> Change Your Name</h2>
+            
+            <div class="setting-group">
+                <label for="newUserName">
+                    <i class="fas fa-user"></i> New Name
+                </label>
+                <input type="text" id="newUserName" placeholder="Enter your new name" maxlength="20" autocomplete="off">
             </div>
-            <!-- BOTTOM RECTANGLE (three columns) – directly attached -->
-            <div class="bottom-about">
-                <div class="bottom-label"><span>ABOUT US</span></div>
-                <div class="bottom-center">
-                    <h2><i class="fas fa-gamepad"></i> What we built</h2>
-                    <p>Browser‑based telephone game with real voice recognition & text‑to‑speech.</p>
-                    <p>Choose your English level (B1–C2) and voice type — each round twists the message further.</p>
-                    <p>Made by a tiny team in this game.</p>
-                </div>
-                <div class="bottom-right"></div> <!-- empty as requested -->
+
+            <div class="modal-buttons">
+                <button class="btn save-btn" id="saveNewName">
+                    <i class="fas fa-check"></i> Save
+                </button>
+                <button class="btn cancel-btn" id="cancelEditName">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
             </div>
         </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- SECTION 4: MAIN ABOUT CONTENT                                    -->
+    <!-- ================================================================ -->
+    <main class="about-main">
+        
+        <!-- About Stack - Two Rectangles Design -->
+        <div class="about-stack">
+            
+            <!-- ======================================================== -->
+            <!-- SECTION 4.1: TOP RECTANGLE (Two Columns)                  -->
+            <!-- ======================================================== -->
+            <div class="top-about">
+                <!-- Left Column: Text Content -->
+                <div class="top-text">
+                    <h2><i class="fas fa-quote-left"></i> The Telephone Game</h2>
+                    <p>A dinner party game gone digital. We transformed the classic "Chinese Whispers" into a modern voice-recognition challenge that tests memory, listening skills, and communication accuracy.</p>
+                    <p>The traditional telephone game has been entertaining people for generations. Now, with the power of modern web technologies, we bring this experience to your browser with real-time voice recognition, text-to-speech, and detailed accuracy tracking.</p>
+                </div>
+                
+                <!-- Right Column: Image/Illustration -->
+                <div class="top-image">
+                    <img src="./images/whisper.jpg" alt="Whisper illustration showing message passing" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-phone-alt\' style=\'font-size:5rem;color:var(--accent-purple);\'></i><p style=\'margin-top:0.5rem;color:var(--text-mid);\'>Message passing illustration</p>'">
+                </div>
+            </div>
+            
+            <!-- ======================================================== -->
+            <!-- SECTION 4.2: BOTTOM RECTANGLE (Three Columns)             -->
+            <!-- ======================================================== -->
+            <div class="bottom-about">
+                <!-- Left Column: Label -->
+                <div class="bottom-label">
+                    <span>ABOUT US</span>
+                </div>
+                
+                <!-- Center Column: Main Content -->
+                <div class="bottom-center">
+                    <h2><i class="fas fa-gamepad"></i> What We Built</h2>
+                    <p>A fully functional browser-based telephone game with real voice recognition and text-to-speech capabilities. Built using HTML5, CSS3, and vanilla JavaScript.</p>
+                    <p>Players can choose their English proficiency level (B1 to C2) which affects speech speed, select from 5 unique voice types, and track their progress through an achievement certificate system.</p>
+                    <p>The game features 5 word categories with over 85 unique sentences, persistent user profiles using localStorage, dark mode toggle, keyboard shortcuts, and auto-save functionality.</p>
+                    <p><strong>Created as part of the Web Technologies course at Edinburgh Napier University.</strong></p>
+                </div>
+                
+                <!-- Right Column: Empty (maintained for layout balance) -->
+                <div class="bottom-right">
+                    <!-- Decorative element - empty as requested but can be used for future content -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================ -->
+        <!-- SECTION 4.3: TECHNOLOGY STACK SECTION                           -->
+        <!-- ================================================================ -->
+        <div class="tech-stack-section">
+            <h2><i class="fas fa-code"></i> Technologies Used</h2>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <i class="fab fa-html5"></i>
+                    <h3>HTML5</h3>
+                    <p>Semantic markup for accessible and SEO-friendly structure</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fab fa-css3-alt"></i>
+                    <h3>CSS3</h3>
+                    <p>Responsive design with CSS Grid, Flexbox, and custom animations</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fab fa-js"></i>
+                    <h3>JavaScript ES6+</h3>
+                    <p>Vanilla JavaScript for game logic, DOM manipulation, and async operations</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-microphone"></i>
+                    <h3>Web Speech API</h3>
+                    <p>Voice recognition and text-to-speech for natural interaction</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-database"></i>
+                    <h3>localStorage</h3>
+                    <p>Persistent user profiles, game history, and achievement storage</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-moon"></i>
+                    <h3>Dark Mode</h3>
+                    <p>User preference persistence with theme toggle</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================================ -->
+        <!-- SECTION 4.4: TEAM SECTION                                       -->
+        <!-- ================================================================ -->
+        <div class="team-section">
+            <h2><i class="fas fa-users"></i> The Team</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3>Swe Zin Ei</h3>
+                    <p>Developer & Designer</p>
+                    <p class="team-bio">Student at Edinburgh Napier University, passionate about web technologies and creating engaging user experiences.</p>
+                </div>
+            </div>
+        </div>
+
     </main>
 
+    <!-- ================================================================ -->
+    <!-- SECTION 5: FOOTER                                                -->
+    <!-- ================================================================ -->
     <footer class="footer">
         <div class="footer-content">
+            <!-- About Section -->
             <div class="footer-section">
                 <h3><i class="fas fa-phone-alt"></i> Telephone Game</h3>
                 <p>The classic party game where messages get hilariously twisted as they're passed from person to person.</p>
-                <div class="social-links"><a href="#" class="social-link"><i class="fab fa-github"></i></a></div>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                </div>
             </div>
+            
+            <!-- Quick Links -->
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
@@ -91,6 +272,8 @@
                     <li><a href="gameinfo.html"><i class="fas fa-chevron-right"></i> Game Info</a></li>
                 </ul>
             </div>
+            
+            <!-- Features List -->
             <div class="footer-section">
                 <h3>Game Features</h3>
                 <ul class="footer-links">
@@ -100,6 +283,8 @@
                     <li><i class="fas fa-graduation-cap"></i> English Levels</li>
                 </ul>
             </div>
+            
+            <!-- Contact Information -->
             <div class="footer-section">
                 <h3>Contact</h3>
                 <ul class="footer-links">
@@ -109,6 +294,8 @@
                 </ul>
             </div>
         </div>
+        
+        <!-- Copyright -->
         <div class="footer-bottom">
             <div class="footer-bottom-content">
                 <p>&copy; 2026 Telephone Game Challenge. All rights reserved.</p>
@@ -116,7 +303,62 @@
         </div>
     </footer>
 
-        <script src="./scripts/game.js"></script>
+    <!-- ================================================================ -->
+    <!-- SECTION 6: USER REGISTRATION MODAL                               -->
+    <!-- ================================================================ -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-user-plus"></i> Welcome to Telephone Game!</h2>
+            <p>Please tell us about yourself</p>
+            
+            <!-- Name Input -->
+            <div class="setting-group">
+                <label for="userName">
+                    <i class="fas fa-user"></i> Your Name
+                </label>
+                <input type="text" id="userName" placeholder="Enter your name" maxlength="20" autocomplete="off">
+            </div>
+
+            <!-- Voice Preference -->
+            <div class="setting-group">
+                <label for="userVoice">
+                    <i class="fas fa-voice"></i> Preferred Voice
+                </label>
+                <select id="userVoice">
+                    <option value="male">👨 Male Voice</option>
+                    <option value="female">👩 Female Voice</option>
+                    <option value="girl">🧒 Girl Voice</option>
+                    <option value="oldWoman">👵 Old Woman Voice</option>
+                    <option value="oldMan">👴 Old Man Voice</option>
+                </select>
+            </div>
+
+            <!-- English Level -->
+            <div class="setting-group">
+                <label for="userLevel">
+                    <i class="fas fa-graduation-cap"></i> English Level
+                </label>
+                <select id="userLevel">
+                    <option value="B1">📘 B1 (Beginner) - Slow speech</option>
+                    <option value="B2">📗 B2 (Intermediate) - Normal speech</option>
+                    <option value="C1">📕 C1 (Advanced) - Fast speech</option>
+                    <option value="C2">📙 C2 (Expert) - Native speed</option>
+                </select>
+                <small>This affects voice speed and clarity during gameplay</small>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn save-btn" id="saveUser">
+                    <i class="fas fa-check"></i> Start Playing
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- SECTION 7: JAVASCRIPT                                            -->
+    <!-- ================================================================ -->
+    <script src="./scripts/game.js"></script>
 
 </body>
 </html>

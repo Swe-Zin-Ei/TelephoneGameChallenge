@@ -3,26 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Telephone Game Challenge - Test your memory by passing messages accurately. Features voice recognition, text-to-speech, and multiple difficulty levels.">
+    <meta name="author" content="Swe Zin Ei">
+    <meta name="keywords" content="telephone game, memory game, voice recognition, word game, party game">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Telephone Game Challenge - Pass The Message</title>
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="./images/favicon.png">
 </head>
 <body>
-    <!-- ========== NAVIGATION BAR ========== -->
+
+    <!-- ================================================================ -->
+    <!-- SECTION 1: NAVIGATION BAR                                        -->
+    <!-- ================================================================ -->
     <nav class="navbar">
         <div class="nav-container">
+            <!-- Brand Logo and Name -->
             <div class="nav-brand">
-                <a href="./index.html"><img src="./images/logo.png"/></a>
+                <a href="./index.html">
+                    <img src="./images/logo.png" alt="Telephone Game Logo">
+                </a>
                 <span>Telephone Game</span>
             </div>
             
+            <!-- Navigation Links -->
             <div class="nav-menu" id="navMenu">
                 <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a>
-                <a href="gameinfo.html" class="nav-link"><i class="fas fa-info-circle"></i>Game Info</a>
-                <a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About Us</a>
+                <a href="gameinfo.html" class="nav-link"><i class="fas fa-info-circle"></i> Game Info</a>
+                <a href="about.html" class="nav-link"><i class="fas fa-users"></i> About Us</a>
             </div>
 
+            <!-- Live Clock Display -->
             <div class="nav-clock">
                 <div class="clock-item">
                     <i class="fas fa-clock"></i>
@@ -34,6 +49,7 @@
                 </div>
             </div>
             
+            <!-- Action Buttons -->
             <div class="nav-actions">
                 <button class="nav-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
                 <button class="nav-btn menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
@@ -44,7 +60,9 @@
         </div>
     </nav>
 
-    <!-- ========== ACCOUNT MODAL ========== -->
+    <!-- ================================================================ -->
+    <!-- SECTION 2: ACCOUNT MODAL                                         -->
+    <!-- ================================================================ -->
     <div class="modal" id="accountModal">
         <div class="modal-content account-modal">
             <div class="account-header">
@@ -53,6 +71,7 @@
                 <p class="account-member-since">Member since <span id="memberSince">Just now</span></p>
             </div>
             
+            <!-- User Statistics Cards -->
             <div class="account-stats">
                 <div class="account-stat-card">
                     <i class="fas fa-gamepad"></i>
@@ -77,13 +96,15 @@
                 </div>
             </div>
             
+            <!-- Certificates Section -->
             <div class="account-certificates">
                 <h3><i class="fas fa-certificate"></i> Your Certificates</h3>
                 <div class="certificates-grid" id="certificatesGrid">
-                    <!-- Certificates will be loaded here -->
+                    <!-- Certificates loaded dynamically by JavaScript -->
                 </div>
             </div>
             
+            <!-- Account Action Buttons -->
             <div class="account-actions">
                 <button class="btn edit-name-btn" id="editNameBtn">
                     <i class="fas fa-edit"></i> Change Name
@@ -95,7 +116,9 @@
         </div>
     </div>
 
-    <!-- ========== EDIT NAME MODAL ========== -->
+    <!-- ================================================================ -->
+    <!-- SECTION 3: EDIT NAME MODAL                                       -->
+    <!-- ================================================================ -->
     <div class="modal" id="editNameModal">
         <div class="modal-content">
             <h2><i class="fas fa-user-edit"></i> Change Your Name</h2>
@@ -104,7 +127,7 @@
                 <label for="newUserName">
                     <i class="fas fa-user"></i> New Name
                 </label>
-                <input type="text" id="newUserName" placeholder="Enter your new name" maxlength="20">
+                <input type="text" id="newUserName" placeholder="Enter your new name" maxlength="20" autocomplete="off">
             </div>
 
             <div class="modal-buttons">
@@ -118,18 +141,26 @@
         </div>
     </div>
 
+    <!-- ================================================================ -->
+    <!-- SECTION 4: MAIN GAME CONTAINER                                   -->
+    <!-- ================================================================ -->
     <div class="container">
+        
         <!-- Game Header -->
         <header class="game-header" id="home">
             <h1><i class="fas fa-phone-alt"></i> TELEPHONE GAME CHALLENGE</h1>
             <p class="subtitle">Pass the message correctly or watch it get hilariously twisted!</p>
         </header>
 
-        <!-- Main Game Area with Optimized Layout -->
+        <!-- Main Game Area - Three Panel Layout -->
         <main class="game-area">
-            <!-- Game Stats on Left Side - Wider -->
+            
+            <!-- ============================================================ -->
+            <!-- PANEL 1: LEFT - GAME STATISTICS                              -->
+            <!-- ============================================================ -->
             <div class="game-stats-left">
                 <div class="stats-vertical">
+                    <!-- Players Stat -->
                     <div class="stat-item" data-tooltip="Number of players in the game">
                         <div class="stat-label">
                             <i class="fas fa-users"></i>
@@ -138,6 +169,7 @@
                         <div class="stat-value" id="playerCount">5</div>
                     </div>
                     
+                    <!-- Round Stat -->
                     <div class="stat-item" data-tooltip="Current round / Total rounds">
                         <div class="stat-label">
                             <i class="fas fa-level-up-alt"></i>
@@ -146,6 +178,7 @@
                         <div class="stat-value" id="currentRound">1/5</div>
                     </div>
                     
+                    <!-- Score Stat -->
                     <div class="stat-item" data-tooltip="Your current score">
                         <div class="stat-label">
                             <i class="fas fa-trophy"></i>
@@ -154,6 +187,7 @@
                         <div class="stat-value" id="score">0</div>
                     </div>
                     
+                    <!-- Timer Stat -->
                     <div class="stat-item" data-tooltip="Time remaining">
                         <div class="stat-label">
                             <i class="fas fa-clock"></i>
@@ -164,16 +198,20 @@
                 </div>
             </div>
 
-            <!-- Center Content - Player Chain and Message Area -->
+            <!-- ============================================================ -->
+            <!-- PANEL 2: CENTER - GAME BOARD                                 -->
+            <!-- ============================================================ -->
             <div class="game-center-content">
-                <!-- Player Chain Display -->
+                
+                <!-- Player Chain Visualization -->
                 <div class="player-chain" id="playerChain">
-                    <!-- Generated by JavaScript -->
+                    <!-- Generated dynamically by JavaScript -->
                 </div>
 
-                <!-- Message Display Area - Optimized Width -->
+                <!-- Message Area -->
                 <div class="message-area">
-                    <!-- Current Player's Turn -->
+                    
+                    <!-- Current Player's Turn Box -->
                     <div class="message-box current-turn" id="currentTurn">
                         <h3><i class="fas fa-microphone"></i> Your Turn</h3>
                         <div class="turn-info">
@@ -183,20 +221,16 @@
                             </div>
                         </div>
                         
-                        <!-- Message to Remember -->
+                        <!-- Message Display Area -->
                         <div class="message-to-remember" id="messageToRemember">
                             <div class="message-display">
                                 <p id="displayText">The message will appear here</p>
                             </div>
                             
-                            <!-- Text-to-Speech Button -->
-                            <div class="tts-control">
-                                <button class="btn tts-btn" id="speakMessageBtn">
-                                    <i class="fas fa-volume-up"></i> Hear Message
-                                </button>
-                                <span class="tts-status" id="ttsStatus"></span>
-                            </div>
+                            <!-- TTS Status - Auto-read plays automatically (no manual button) -->
+                            <div class="tts-status" id="ttsStatus" style="text-align: center; margin: 5px 0;"></div>
                             
+                            <!-- Timer Bar -->
                             <div class="message-timer">
                                 <div class="timer-bar">
                                     <div class="timer-progress" id="messageTimer"></div>
@@ -205,8 +239,10 @@
                             </div>
                         </div>
 
-                        <!-- Input Area -->
+                        <!-- Input Area with Tabs -->
                         <div class="input-area" id="inputArea">
+                            
+                            <!-- Tab Buttons -->
                             <div class="input-tabs">
                                 <button class="tab-btn active" id="typeTab">
                                     <i class="fas fa-keyboard"></i> Type
@@ -216,7 +252,7 @@
                                 </button>
                             </div>
                             
-                            <!-- Type Input -->
+                            <!-- Tab 1: Type Input -->
                             <div class="tab-content" id="typeInput">
                                 <h4><i class="fas fa-keyboard"></i> Type what you remember</h4>
                                 <div class="input-group">
@@ -229,9 +265,15 @@
                                         <i class="fas fa-paper-plane"></i> Send
                                     </button>
                                 </div>
+                                
+                                <!-- Real-time Type Match Feedback -->
+                                <div class="type-match-feedback" id="typeMatchFeedback" style="display: none;">
+                                    <h5><i class="fas fa-check-circle"></i> Type Match Check</h5>
+                                    <div class="match-result" id="typeMatchResult"></div>
+                                </div>
                             </div>
                             
-                            <!-- Voice Input -->
+                            <!-- Tab 2: Voice Input -->
                             <div class="tab-content" id="voiceInput" style="display: none;">
                                 <h4><i class="fas fa-microphone"></i> Speak what you remember</h4>
                                 <div class="voice-controls">
@@ -247,7 +289,7 @@
                                 </div>
                                 <div class="voice-result" id="voiceResult"></div>
                                 
-                                <!-- Voice Match Check -->
+                                <!-- Voice Match Feedback with Action Buttons -->
                                 <div class="voice-match" id="voiceMatch" style="display: none;">
                                     <h5><i class="fas fa-check-circle"></i> Voice Match Check</h5>
                                     <div class="match-result" id="matchResult"></div>
@@ -262,7 +304,7 @@
                         </div>
                     </div>
 
-                    <!-- Results Display -->
+                    <!-- Results Display Box -->
                     <div class="message-box results" id="resultsBox" style="display: none;">
                         <h3><i class="fas fa-chart-bar"></i> Results</h3>
                         <div class="results-content">
@@ -284,16 +326,15 @@
                 </div>
             </div>
 
-            <!-- Right Side Panel - Voice Settings and Game Controls -->
+            <!-- ============================================================ -->
+            <!-- PANEL 3: RIGHT - SETTINGS AND CONTROLS                       -->
+            <!-- ============================================================ -->
             <div class="game-right-panel">
-                <!-- Voice Settings -->
+                
+                <!-- Voice Settings Panel -->
                 <div class="voice-settings-panel">
-                    <!-- <div class="panel-header">
-                        <i class="fas fa-microphone-alt"></i>
-                        <span>Voice Settings</span>
-                    </div> -->
-                    
                     <div class="voice-controls-row">
+                        <!-- Voice Type Selection -->
                         <div class="voice-control-item">
                             <div class="voice-control-label">
                                 <i class="fas fa-voice"></i>
@@ -308,16 +349,17 @@
                             </select>
                         </div>
                         
+                        <!-- English Level Selection -->
                         <div class="voice-control-item">
                             <div class="voice-control-label">
                                 <i class="fas fa-graduation-cap"></i>
                                 <span>English Level</span>
                             </div>
                             <select id="mainLevelSelect" class="voice-select">
-                                <option value="B1">📘 B1</option>
-                                <option value="B2">📗 B2</option>
-                                <option value="C1">📕 C1</option>
-                                <option value="C2">📙 C2</option>
+                                <option value="B1">📘 B1 (Beginner)</option>
+                                <option value="B2">📗 B2 (Intermediate)</option>
+                                <option value="C1">📕 C1 (Advanced)</option>
+                                <option value="C2">📙 C2 (Expert)</option>
                             </select>
                         </div>
                     </div>
@@ -327,49 +369,40 @@
 
                 <!-- Game Controls Panel -->
                 <div class="game-controls-panel">
-                    <!-- <div class="panel-header">
-                        <i class="fas fa-gamepad"></i>
-                        <span>Game Actions</span>
-                    </div> -->
                     
-                    <!-- Row 1: Start Game and Next Round side by side -->
+                    <!-- Row 1: Start Game and Next Round -->
                     <div class="button-row">
                         <button class="action-btn start-btn" id="startBtn">
                             <i class="fas fa-play"></i> Start Game
                         </button>
-                        
                         <button class="action-btn next-btn" id="nextBtn" disabled>
                             <i class="fas fa-forward"></i> Next Round
                         </button>
                     </div>
                     
-                    <!-- Row 2: Restart Game centered alone -->
+                    <!-- Row 2: Restart Game -->
                     <div class="button-row centered">
                         <button class="action-btn restart-btn" id="resetBtn">
                             <i class="fas fa-redo-alt"></i> Restart Game
                         </button>
                     </div>
                     
-                    <!-- Row 3: Word Categories and Game Settings side by side -->
+                    <!-- Row 3: Word Categories and Game Settings -->
                     <div class="button-row">
                         <button class="action-btn categories-btn" id="categoriesToggleBtn">
                             <i class="fas fa-tags"></i> Word Categories
                         </button>
-                        
                         <button class="action-btn settings-btn" id="settingsBtn">
                             <i class="fas fa-cog"></i> Game Settings
                         </button>
                     </div>
-                    
-                    <!-- <div class="panel-footer">
-                        <i class="fas fa-phone-alt"></i>
-                        <span>Telephone Game</span>
-                    </div> -->
                 </div>
             </div>
         </main>
 
-        <!-- Word Categories Modal -->
+        <!-- ================================================================ -->
+        <!-- SECTION 5: WORD CATEGORIES MODAL                                 -->
+        <!-- ================================================================ -->
         <div class="modal" id="categoriesModal">
             <div class="modal-content categories-modal">
                 <div class="categories-modal-header">
@@ -380,6 +413,7 @@
                 </div>
                 
                 <div class="categories-modal-body">
+                    <!-- Category Buttons Grid -->
                     <div class="category-buttons-grid">
                         <button class="category-card active" data-category="easy">
                             <div class="category-icon">🌟</div>
@@ -427,6 +461,7 @@
                         </button>
                     </div>
                     
+                    <!-- Category Preview -->
                     <div class="category-preview" id="categoryPreview">
                         <h4><i class="fas fa-eye"></i> Preview</h4>
                         <div class="preview-message" id="previewMessage">
@@ -452,9 +487,9 @@
             </div>
         </div>
 
-
-
-        <!-- Game History -->
+        <!-- ================================================================ -->
+        <!-- SECTION 6: GAME HISTORY                                         -->
+        <!-- ================================================================ -->
         <div class="history">
             <h3><i class="fas fa-history"></i> Game History</h3>
             <div class="history-list" id="historyList">
@@ -463,9 +498,12 @@
         </div>
     </div>
 
-    <!-- ========== FOOTER ========== -->
+    <!-- ================================================================ -->
+    <!-- SECTION 7: FOOTER                                                -->
+    <!-- ================================================================ -->
     <footer class="footer">
         <div class="footer-content">
+            <!-- About Section -->
             <div class="footer-section">
                 <h3><i class="fas fa-phone-alt"></i> Telephone Game</h3>
                 <p>The classic party game where messages get hilariously twisted as they're passed from person to person.</p>
@@ -474,6 +512,7 @@
                 </div>
             </div>
             
+            <!-- Quick Links -->
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
@@ -483,6 +522,7 @@
                 </ul>
             </div>
             
+            <!-- Features List -->
             <div class="footer-section">
                 <h3>Game Features</h3>
                 <ul class="footer-links">
@@ -493,16 +533,18 @@
                 </ul>
             </div>
             
+            <!-- Contact Information -->
             <div class="footer-section">
                 <h3>Contact</h3>
                 <ul class="footer-links">
-                    <li><i class="fas fa-envelope"></i>support@telephonegame.com</li>
-                    <li><i class="fas fa-globe"></i>szetelephonegamechallenge.neocities.org</li>
+                    <li><i class="fas fa-envelope"></i> support@telephonegame.com</li>
+                    <li><i class="fas fa-globe"></i> szetelephonegamechallenge.neocities.org</li>
                     <li><i class="fas fa-map-marker-alt"></i> Edinburgh, Scotland</li>
                 </ul>
             </div>
         </div>
         
+        <!-- Copyright -->
         <div class="footer-bottom">
             <div class="footer-bottom-content">
                 <p>&copy; 2026 Telephone Game Challenge. All rights reserved.</p>
@@ -510,19 +552,23 @@
         </div>
     </footer>
 
-    <!-- User Registration Modal -->
+    <!-- ================================================================ -->
+    <!-- SECTION 8: USER REGISTRATION MODAL                               -->
+    <!-- ================================================================ -->
     <div class="modal" id="userModal">
         <div class="modal-content">
             <h2><i class="fas fa-user-plus"></i> Welcome to Telephone Game!</h2>
             <p>Please tell us about yourself</p>
             
+            <!-- Name Input -->
             <div class="setting-group">
                 <label for="userName">
                     <i class="fas fa-user"></i> Your Name
                 </label>
-                <input type="text" id="userName" placeholder="Enter your name" maxlength="20">
+                <input type="text" id="userName" placeholder="Enter your name" maxlength="20" autocomplete="off">
             </div>
 
+            <!-- Voice Preference -->
             <div class="setting-group">
                 <label for="userVoice">
                     <i class="fas fa-voice"></i> Preferred Voice
@@ -536,6 +582,7 @@
                 </select>
             </div>
 
+            <!-- English Level -->
             <div class="setting-group">
                 <label for="userLevel">
                     <i class="fas fa-graduation-cap"></i> English Level
@@ -557,11 +604,14 @@
         </div>
     </div>
 
-    <!-- Settings Modal -->
+    <!-- ================================================================ -->
+    <!-- SECTION 9: SETTINGS MODAL                                        -->
+    <!-- ================================================================ -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
             <h2><i class="fas fa-cog"></i> Game Settings</h2>
             
+            <!-- Number of Players -->
             <div class="setting-group">
                 <label for="playerCountSelect">
                     <i class="fas fa-users"></i> Number of Players
@@ -575,6 +625,7 @@
                 </select>
             </div>
 
+            <!-- Memory Time Limit -->
             <div class="setting-group">
                 <label for="timeLimitSelect">
                     <i class="fas fa-clock"></i> Memory Time
@@ -587,6 +638,7 @@
                 </select>
             </div>
 
+            <!-- Number of Rounds -->
             <div class="setting-group">
                 <label for="roundCountSelect">
                     <i class="fas fa-repeat"></i> Number of Rounds
@@ -599,6 +651,7 @@
                 </select>
             </div>
 
+            <!-- Sound Effects Toggle -->
             <div class="setting-group">
                 <label for="soundToggle">
                     <i class="fas fa-volume-up"></i> Sound Effects
@@ -609,6 +662,7 @@
                 </div>
             </div>
 
+            <!-- Auto-Read Messages Toggle -->
             <div class="setting-group">
                 <label for="autoReadToggle">
                     <i class="fas fa-robot"></i> Auto-Read Messages
@@ -630,11 +684,14 @@
         </div>
     </div>
 
-    <!-- Game Over Modal -->
+    <!-- ================================================================ -->
+    <!-- SECTION 10: GAME OVER MODAL                                      -->
+    <!-- ================================================================ -->
     <div class="modal" id="gameOverModal">
         <div class="modal-content">
             <h2 id="gameOverTitle"></h2>
             <div class="game-over-content">
+                <!-- Final Statistics -->
                 <div class="final-stats">
                     <div class="final-stat">
                         <h4>Rounds Played</h4>
@@ -652,6 +709,7 @@
                 
                 <div class="game-over-message" id="gameOverMessage"></div>
                 
+                <!-- Best Phrase Display -->
                 <div class="final-phrase">
                     <h4>Most Accurate Round</h4>
                     <p id="bestPhrase"></p>
@@ -669,6 +727,9 @@
         </div>
     </div>
 
+    <!-- ================================================================ -->
+    <!-- SECTION 11: JAVASCRIPT                                           -->
+    <!-- ================================================================ -->
     <script src="./scripts/game.js"></script>
 </body>
 </html>
