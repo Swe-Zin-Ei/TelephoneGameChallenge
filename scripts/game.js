@@ -10,13 +10,6 @@
 // SECTION 1: GAME CONFIGURATION
 // ================================================================
 
-/**
- * Game configuration object containing all static data
- * - Categories: Word banks for different difficulty levels
- * - Voice mapping: Browser-specific voice name mappings
- * - Level settings: Speech rate adjustments for English proficiency levels
- * - Certificates: Achievement definitions with colors and icons
- */
 const gameConfig = {
     categories: {
         easy: {
@@ -196,7 +189,13 @@ function playSound(type) {
     if (!gameState.soundEnabled) return;
     
     try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        // AudioContext needs user interaction on mobile - try to resume
+        if (window.audioContext && window.audioContext.state === 'suspended') {
+            window.audioContext.resume();
+        }
+        
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioCtx();
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
         
@@ -242,7 +241,7 @@ function playSound(type) {
         }
         
         oscillator.frequency.value = frequency;
-        gainNode.gain.value = 0.3;
+        gainNode.gain.value = 0.2;
         
         oscillator.start();
         oscillator.stop(audioContext.currentTime + duration);
@@ -251,7 +250,7 @@ function playSound(type) {
             audioContext.close();
         }, duration * 1000 + 100);
     } catch(e) {
-        console.log('Sound not played:', e);
+        // Silent fail on mobile
     }
 }
 
@@ -297,9 +296,7 @@ function loadAutoSave() {
                     return true;
                 }
             }
-        } catch(e) {
-            console.error('Failed to load auto-save:', e);
-        }
+        } catch(e) {}
     }
     return false;
 }
@@ -309,7 +306,7 @@ function clearAutoSave() {
 }
 
 // ================================================================
-// SECTION 5: KEYBOARD SHORTCUTS
+// SECTION 5: KEYBOARD SHORTCUTS (Desktop only)
 // ================================================================
 
 function setupKeyboardShortcuts() {
@@ -653,7 +650,6 @@ function loadUserFromStorage() {
             gameState.user = { ...gameState.user, ...userData };
             return true;
         } catch (e) {
-            console.error('Failed to load user data:', e);
             return false;
         }
     }
@@ -1110,7 +1106,7 @@ function startGame() {
     if (!elements.userModal || !elements.startBtn || !elements.nextBtn) return;
     
     if (!gameState.user.registered) {
-        elements.userModal.style.display = 'flex';
+        if (elements.userModal) elements.userModal.style.display = 'flex';
         return;
     }
     
@@ -1159,7 +1155,7 @@ function startPlayerTurn() {
     
     if (elements.playerInput) elements.playerInput.value = '';
     
-    let messageToShow;
+    let messageToShow = '';
     if (gameState.currentPlayer === 1) {
         messageToShow = gameState.originalMessage;
         elements.instruction.textContent = `${gameState.user.name}, remember this carefully!`;
@@ -1171,15 +1167,18 @@ function startPlayerTurn() {
     
     gameState.currentTargetMessage = messageToShow;
     
+    // Show message for first player of each round
     if (gameState.currentPlayer === 1) {
-        elements.displayText.textContent = messageToShow;
-        elements.displayText.style.opacity = '1';
-        elements.displayText.style.display = 'flex';
+        if (elements.displayText) {
+            elements.displayText.textContent = messageToShow;
+            elements.displayText.style.opacity = '1';
+            elements.displayText.style.display = 'flex';
+        }
         
         setTimeout(() => {
             if (elements.displayText && gameState.currentPlayer === 1) {
                 elements.displayText.textContent = '🔊 Message hidden... Listen carefully!';
-                elements.displayText.style.opacity = '0.3';
+                elements.displayText.style.opacity = '0.5';
             }
         }, gameState.memoryTime * 1000);
         
@@ -1218,9 +1217,12 @@ function startPlayerTurn() {
             startTimer();
         }
     } else {
-        elements.displayText.textContent = '🔊 Listen carefully to the voice...';
-        elements.displayText.style.opacity = '0.3';
-        elements.displayText.style.display = 'flex';
+        // Other players - no text, only audio
+        if (elements.displayText) {
+            elements.displayText.textContent = '🔊 Listen carefully to the voice...';
+            elements.displayText.style.opacity = '0.5';
+            elements.displayText.style.display = 'flex';
+        }
         
         gameState.waitingForPlayerInput = false;
         if (elements.startListeningBtn) elements.startListeningBtn.disabled = true;
@@ -1255,23 +1257,27 @@ function startTimer() {
     const startTime = Date.now();
     const totalTime = gameState.memoryTime * 1000;
     
+    if (gameState.timer) clearInterval(gameState.timer);
+    
     gameState.timer = setInterval(() => {
         const elapsed = Date.now() - startTime;
         const remaining = Math.max(0, totalTime - elapsed);
         
         gameState.timeLeft = Math.ceil(remaining / 1000);
-        elements.timer.textContent = `${gameState.timeLeft}s`;
-        elements.messageTimeLeft.textContent = `${gameState.timeLeft}s`;
+        if (elements.timer) elements.timer.textContent = `${gameState.timeLeft}s`;
+        if (elements.messageTimeLeft) elements.messageTimeLeft.textContent = `${gameState.timeLeft}s`;
         
         const percentage = (remaining / totalTime) * 100;
-        elements.messageTimer.style.width = `${percentage}%`;
+        if (elements.messageTimer) elements.messageTimer.style.width = `${percentage}%`;
         
-        if (gameState.timeLeft <= 3) {
-            elements.messageTimer.style.background = 'linear-gradient(to right, #ef476f, #f72585)';
-        } else if (gameState.timeLeft <= 7) {
-            elements.messageTimer.style.background = 'linear-gradient(to right, #f8961e, #f9c74f)';
-        } else {
-            elements.messageTimer.style.background = 'linear-gradient(to right, #4cc9f0, #2ec4b6)';
+        if (elements.messageTimer) {
+            if (gameState.timeLeft <= 3) {
+                elements.messageTimer.style.background = 'linear-gradient(to right, #ef476f, #f72585)';
+            } else if (gameState.timeLeft <= 7) {
+                elements.messageTimer.style.background = 'linear-gradient(to right, #f8961e, #f9c74f)';
+            } else {
+                elements.messageTimer.style.background = 'linear-gradient(to right, #4cc9f0, #2ec4b6)';
+            }
         }
         
         if (remaining <= 0) {
@@ -1432,13 +1438,15 @@ function nextRound() {
     gameState.roundComplete = false;
     gameState.waitingForPlayerInput = true;
     
-    elements.currentRound.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
+    if (elements.currentRound) elements.currentRound.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
     if (elements.resultsBox) elements.resultsBox.style.display = 'none';
     if (elements.currentTurn) elements.currentTurn.style.display = 'block';
     
-    elements.startBtn.style.display = 'inline-flex';
-    elements.startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-    elements.nextBtn.disabled = true;
+    if (elements.startBtn) {
+        elements.startBtn.style.display = 'inline-flex';
+        elements.startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+    }
+    if (elements.nextBtn) elements.nextBtn.disabled = true;
     
     resetVoiceUI();
     resetTypeUI();
@@ -1572,9 +1580,7 @@ function loadSettings() {
             if (elements.autoReadToggle) elements.autoReadToggle.checked = gameState.autoReadEnabled;
             if (elements.playerCount) elements.playerCount.textContent = gameState.players;
             if (elements.currentRound) elements.currentRound.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
-        } catch(e) {
-            console.error('Failed to load settings:', e);
-        }
+        } catch(e) {}
     }
 }
 
@@ -1612,27 +1618,31 @@ function saveSettings() {
 
 function initCategoryModal() {
     if (elements.categoriesToggleBtn && elements.categoriesModal) {
-        elements.categoriesToggleBtn.addEventListener('click', () => {
+        elements.categoriesToggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             openCategoryModal();
             playSound('click');
         });
     }
     
     if (elements.closeCategoriesModal && elements.categoriesModal) {
-        elements.closeCategoriesModal.addEventListener('click', () => {
+        elements.closeCategoriesModal.addEventListener('click', (e) => {
+            e.preventDefault();
             closeCategoryModal();
         });
     }
     
     if (elements.cancelCategoryBtn && elements.categoriesModal) {
-        elements.cancelCategoryBtn.addEventListener('click', () => {
+        elements.cancelCategoryBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             closeCategoryModal();
         });
     }
     
     if (elements.categoryCards) {
         elements.categoryCards.forEach(card => {
-            card.addEventListener('click', () => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
                 elements.categoryCards.forEach(c => c.classList.remove('active'));
                 card.classList.add('active');
                 const category = card.dataset.category;
@@ -1643,7 +1653,8 @@ function initCategoryModal() {
     }
     
     if (elements.applyCategoryBtn && elements.categoriesModal) {
-        elements.applyCategoryBtn.addEventListener('click', () => {
+        elements.applyCategoryBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             const activeCard = document.querySelector('.category-card.active');
             if (activeCard) {
                 const category = activeCard.dataset.category;
@@ -1753,10 +1764,13 @@ function setupMobileMenu() {
     const navMenu = document.getElementById('navMenu');
     
     if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => {
+        menuToggle.addEventListener('click', (e) => {
+            e.preventDefault();
             navMenu.classList.toggle('active');
-            menuToggle.querySelector('i').className = 
-                navMenu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                icon.className = navMenu.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+            }
             playSound('click');
         });
     }
@@ -1772,7 +1786,8 @@ function setupThemeToggle() {
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
         
-        themeToggle.addEventListener('click', () => {
+        themeToggle.addEventListener('click', (e) => {
+            e.preventDefault();
             isDarkMode = !isDarkMode;
             document.body.classList.toggle('dark-mode');
             themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
@@ -1811,12 +1826,21 @@ function showWelcomeBack() {
 }
 
 // ================================================================
-// SECTION 19: EVENT LISTENERS
+// SECTION 19: EVENT LISTENERS (MOBILE OPTIMIZED)
 // ================================================================
 
 function setupEventListeners() {
+    // User registration - CRITICAL for mobile
     if (elements.saveUser && elements.userModal) {
-        elements.saveUser.addEventListener('click', () => {
+        // Remove any existing listeners to prevent duplicates
+        const newSaveUser = elements.saveUser.cloneNode(true);
+        elements.saveUser.parentNode.replaceChild(newSaveUser, elements.saveUser);
+        elements.saveUser = newSaveUser;
+        
+        elements.saveUser.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const name = elements.userName?.value.trim();
             if (!name) {
                 alert('Please enter your name');
@@ -1838,15 +1862,20 @@ function setupEventListeners() {
             };
             
             saveUserToStorage();
-            elements.userModal.style.display = 'none';
+            if (elements.userModal) elements.userModal.style.display = 'none';
             updateAccountUI();
-            showWelcomeBack();
+            
+            if (document.querySelector('.game-area')) {
+                showWelcomeBack();
+            }
+            
             resetVoiceUI();
             resetTypeUI();
             playSound('success');
         });
     }
     
+    // Account navigation
     const accountLinks = [elements.accountNavLink, elements.footerAccountLink];
     accountLinks.forEach(link => {
         if (link) {
@@ -1863,11 +1892,12 @@ function setupEventListeners() {
         }
     });
     
+    // Edit name functionality
     if (elements.editNameBtn && elements.accountModal && elements.editNameModal) {
         elements.editNameBtn.addEventListener('click', () => {
             if (elements.newUserName) elements.newUserName.value = gameState.user.name;
-            elements.accountModal.style.display = 'none';
-            elements.editNameModal.style.display = 'flex';
+            if (elements.accountModal) elements.accountModal.style.display = 'none';
+            if (elements.editNameModal) elements.editNameModal.style.display = 'flex';
             playSound('click');
         });
     }
@@ -1879,7 +1909,7 @@ function setupEventListeners() {
                 gameState.user.name = newName;
                 saveUserToStorage();
                 updateAccountUI();
-                elements.editNameModal.style.display = 'none';
+                if (elements.editNameModal) elements.editNameModal.style.display = 'none';
                 showNotification('Name updated!', 'success');
                 playSound('success');
             }
@@ -1888,26 +1918,49 @@ function setupEventListeners() {
     
     if (elements.cancelEditName && elements.editNameModal) {
         elements.cancelEditName.addEventListener('click', () => {
-            elements.editNameModal.style.display = 'none';
+            if (elements.editNameModal) elements.editNameModal.style.display = 'none';
             playSound('click');
         });
     }
     
     if (elements.closeAccountBtn && elements.accountModal) {
         elements.closeAccountBtn.addEventListener('click', () => {
-            elements.accountModal.style.display = 'none';
+            if (elements.accountModal) elements.accountModal.style.display = 'none';
             playSound('click');
         });
     }
     
+    // Voice and level changes
     if (elements.mainVoiceSelect) elements.mainVoiceSelect.addEventListener('change', updateVoiceAndLevel);
     if (elements.mainLevelSelect) elements.mainLevelSelect.addEventListener('change', updateVoiceAndLevel);
     
-    if (elements.startBtn) elements.startBtn.addEventListener('click', startGame);
-    if (elements.nextBtn) elements.nextBtn.addEventListener('click', nextRound);
-    if (elements.resetBtn) elements.resetBtn.addEventListener('click', resetGame);
+    // Game control buttons
+    if (elements.startBtn) {
+        const newStartBtn = elements.startBtn.cloneNode(true);
+        elements.startBtn.parentNode.replaceChild(newStartBtn, elements.startBtn);
+        elements.startBtn = newStartBtn;
+        elements.startBtn.addEventListener('click', startGame);
+    }
     
+    if (elements.nextBtn) {
+        const newNextBtn = elements.nextBtn.cloneNode(true);
+        elements.nextBtn.parentNode.replaceChild(newNextBtn, elements.nextBtn);
+        elements.nextBtn = newNextBtn;
+        elements.nextBtn.addEventListener('click', nextRound);
+    }
+    
+    if (elements.resetBtn) {
+        const newResetBtn = elements.resetBtn.cloneNode(true);
+        elements.resetBtn.parentNode.replaceChild(newResetBtn, elements.resetBtn);
+        elements.resetBtn = newResetBtn;
+        elements.resetBtn.addEventListener('click', resetGame);
+    }
+    
+    // Submit button
     if (elements.submitBtn) {
+        const newSubmitBtn = elements.submitBtn.cloneNode(true);
+        elements.submitBtn.parentNode.replaceChild(newSubmitBtn, elements.submitBtn);
+        elements.submitBtn = newSubmitBtn;
         elements.submitBtn.addEventListener('click', () => {
             const input = elements.playerInput?.value.trim();
             if (input) {
@@ -1917,6 +1970,7 @@ function setupEventListeners() {
         });
     }
     
+    // Player input field
     if (elements.playerInput) {
         elements.playerInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && gameState.gameActive && gameState.waitingForPlayerInput) {
@@ -1940,6 +1994,7 @@ function setupEventListeners() {
         });
     }
     
+    // Input tabs
     if (elements.typeTab && elements.voiceTab && elements.typeInput && elements.voiceInput) {
         elements.typeTab.addEventListener('click', () => {
             elements.typeTab.classList.add('active');
@@ -1960,7 +2015,16 @@ function setupEventListeners() {
         });
     }
     
+    // Voice recognition buttons
     if (elements.startListeningBtn && elements.stopListeningBtn) {
+        const newStartBtn = elements.startListeningBtn.cloneNode(true);
+        elements.startListeningBtn.parentNode.replaceChild(newStartBtn, elements.startListeningBtn);
+        elements.startListeningBtn = newStartBtn;
+        
+        const newStopBtn = elements.stopListeningBtn.cloneNode(true);
+        elements.stopListeningBtn.parentNode.replaceChild(newStopBtn, elements.stopListeningBtn);
+        elements.stopListeningBtn = newStopBtn;
+        
         elements.startListeningBtn.addEventListener('click', () => {
             if (gameState.recognition && gameState.gameActive && gameState.waitingForPlayerInput) {
                 try { 
@@ -1978,7 +2042,11 @@ function setupEventListeners() {
         });
     }
     
+    // Voice action buttons
     if (elements.useVoiceBtn) {
+        const newUseVoiceBtn = elements.useVoiceBtn.cloneNode(true);
+        elements.useVoiceBtn.parentNode.replaceChild(newUseVoiceBtn, elements.useVoiceBtn);
+        elements.useVoiceBtn = newUseVoiceBtn;
         elements.useVoiceBtn.addEventListener('click', () => {
             const spoken = elements.voiceResult?.textContent;
             if (spoken) {
@@ -1989,6 +2057,9 @@ function setupEventListeners() {
     }
     
     if (elements.tryAgainBtn) {
+        const newTryAgainBtn = elements.tryAgainBtn.cloneNode(true);
+        elements.tryAgainBtn.parentNode.replaceChild(newTryAgainBtn, elements.tryAgainBtn);
+        elements.tryAgainBtn = newTryAgainBtn;
         elements.tryAgainBtn.addEventListener('click', () => {
             resetVoiceUI();
             if (gameState.recognition && gameState.gameActive && gameState.waitingForPlayerInput) {
@@ -2000,7 +2071,11 @@ function setupEventListeners() {
         });
     }
     
+    // Settings modal
     if (elements.settingsBtn && elements.settingsModal) {
+        const newSettingsBtn = elements.settingsBtn.cloneNode(true);
+        elements.settingsBtn.parentNode.replaceChild(newSettingsBtn, elements.settingsBtn);
+        elements.settingsBtn = newSettingsBtn;
         elements.settingsBtn.addEventListener('click', () => {
             if (elements.playerCountSelect) elements.playerCountSelect.value = gameState.players;
             if (elements.roundCountSelect) elements.roundCountSelect.value = gameState.totalRounds;
@@ -2008,7 +2083,7 @@ function setupEventListeners() {
             if (elements.soundToggle) elements.soundToggle.checked = gameState.soundEnabled;
             if (elements.autoReadToggle) elements.autoReadToggle.checked = gameState.autoReadEnabled;
             
-            elements.settingsModal.style.display = 'flex';
+            if (elements.settingsModal) elements.settingsModal.style.display = 'flex';
             playSound('click');
         });
     }
@@ -2019,42 +2094,53 @@ function setupEventListeners() {
     
     if (elements.closeSettings && elements.settingsModal) {
         elements.closeSettings.addEventListener('click', () => {
-            elements.settingsModal.style.display = 'none';
+            if (elements.settingsModal) elements.settingsModal.style.display = 'none';
             playSound('click');
         });
     }
     
+    // Game over modal buttons
     if (elements.playAgainBtn && elements.gameOverModal) {
+        const newPlayAgainBtn = elements.playAgainBtn.cloneNode(true);
+        elements.playAgainBtn.parentNode.replaceChild(newPlayAgainBtn, elements.playAgainBtn);
+        elements.playAgainBtn = newPlayAgainBtn;
         elements.playAgainBtn.addEventListener('click', () => {
-            elements.gameOverModal.style.display = 'none';
+            if (elements.gameOverModal) elements.gameOverModal.style.display = 'none';
             resetGame();
             playSound('click');
         });
     }
     
     if (elements.mainMenuBtn && elements.gameOverModal) {
+        const newMainMenuBtn = elements.mainMenuBtn.cloneNode(true);
+        elements.mainMenuBtn.parentNode.replaceChild(newMainMenuBtn, elements.mainMenuBtn);
+        elements.mainMenuBtn = newMainMenuBtn;
         elements.mainMenuBtn.addEventListener('click', () => {
-            elements.gameOverModal.style.display = 'none';
+            if (elements.gameOverModal) elements.gameOverModal.style.display = 'none';
             playSound('click');
         });
     }
     
+    // Close modals when clicking outside
     window.addEventListener('click', (e) => {
-        if (elements.userModal && e.target === elements.userModal) return;
+        if (elements.userModal && e.target === elements.userModal) {
+            // Don't close user modal on outside click
+            return;
+        }
         if (elements.settingsModal && e.target === elements.settingsModal) {
-            elements.settingsModal.style.display = 'none';
+            if (elements.settingsModal) elements.settingsModal.style.display = 'none';
         }
         if (elements.gameOverModal && e.target === elements.gameOverModal) {
-            elements.gameOverModal.style.display = 'none';
+            if (elements.gameOverModal) elements.gameOverModal.style.display = 'none';
         }
         if (elements.accountModal && e.target === elements.accountModal) {
-            elements.accountModal.style.display = 'none';
+            if (elements.accountModal) elements.accountModal.style.display = 'none';
         }
         if (elements.editNameModal && e.target === elements.editNameModal) {
-            elements.editNameModal.style.display = 'none';
+            if (elements.editNameModal) elements.editNameModal.style.display = 'none';
         }
         if (elements.categoriesModal && e.target === elements.categoriesModal) {
-            elements.categoriesModal.style.display = 'none';
+            if (elements.categoriesModal) elements.categoriesModal.style.display = 'none';
         }
     });
 }
@@ -2083,21 +2169,28 @@ function updateClock() {
 }
 
 async function initGame() {
+    console.log("Game initializing...");
+    
     initElements();
+    console.log("Elements initialized");
+    
     await loadVoices();
+    console.log("Voices loaded");
     
     setupMobileMenu();
     setupThemeToggle();
     setupKeyboardShortcuts();
     
     const hasUser = loadUserFromStorage();
+    console.log("Has user:", hasUser, "Registered:", gameState.user.registered);
     
-    // FIX: Show modal on mobile - properly detect home page
+    // Check if we're on the home page
     const isHomePage = window.location.pathname === '/' || 
                        window.location.pathname.includes('index.html') ||
                        window.location.pathname.endsWith('/');
     
     if (hasUser && gameState.user.registered && gameState.user.name) {
+        console.log("User found:", gameState.user.name);
         if (elements.userModal) elements.userModal.style.display = 'none';
         updateAccountUI();
         checkCertificates();
@@ -2107,10 +2200,9 @@ async function initGame() {
             showWelcomeBack();
         }
     } else {
+        console.log("No user found, showing registration modal");
         if (elements.userModal && isHomePage) {
-            setTimeout(() => {
-                elements.userModal.style.display = 'flex';
-            }, 100);
+            elements.userModal.style.display = 'flex';
         }
     }
     
@@ -2145,6 +2237,8 @@ async function initGame() {
             localStorage.setItem('shortcutsShown', 'true');
         }
     }, 1000);
+    
+    console.log("Game initialization complete");
 }
 
 document.addEventListener('DOMContentLoaded', initGame);
