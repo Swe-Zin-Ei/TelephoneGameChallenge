@@ -765,17 +765,19 @@ function updateCertificates() {
         const colors = certColors[cert.id] || { main: '#4cc9f0', light: '#72d4f5', dark: '#2a9dcc' };
         
         html += `
-            <div class="certificate-card ${isEarned ? 'earned' : 'locked'}" style="--cert-color: ${colors.main}; --cert-color-light: ${colors.light}; --cert-color-dark: ${colors.dark};">
+            <div class="certificate-card ${isEarned ? 'earned' : 'locked'}">
                 <div class="certificate-top-bar" style="background: linear-gradient(90deg, ${colors.main}, ${colors.light});"></div>
                 <div class="certificate-inner">
-                    <div class="certificate-icon-box" style="background: linear-gradient(135deg, ${colors.main}, ${colors.dark});">
-                        <span class="certificate-icon-emoji">${cert.icon}</span>
+                    <div class="certificate-header-row">
+                        <div class="certificate-icon-box" style="background: linear-gradient(135deg, ${colors.main}, ${colors.dark});">
+                            <span class="certificate-icon-emoji">${cert.icon}</span>
+                        </div>
+                        <div class="certificate-text-container">
+                            <div class="certificate-name">${cert.name}</div>
+                            <div class="certificate-description">${cert.description}</div>
+                        </div>
                     </div>
-                    <div class="certificate-info-box">
-                        <h4>${cert.name}</h4>
-                        <p>${cert.description}</p>
-                    </div>
-                    <div class="certificate-badge-box">
+                    <div class="certificate-badge-row">
                         ${isEarned ? 
                             '<span class="earned-badge-modern"><i class="fas fa-check-circle"></i> EARNED</span>' : 
                             '<span class="locked-badge-modern"><i class="fas fa-lock"></i> LOCKED</span>'}
@@ -786,7 +788,7 @@ function updateCertificates() {
                         <i class="fas ${isEarned ? 'fa-trophy' : 'fa-hourglass-half'}"></i>
                         <span>${isEarned ? 'Achievement Unlocked' : 'Not yet earned'}</span>
                     </div>
-                    ${isEarned ? '<i class="fas fa-star" style="color: #f9c74f; font-size: 0.8rem;"></i>' : ''}
+                    ${isEarned ? '<i class="fas fa-star certificate-star"></i>' : ''}
                 </div>
                 <div class="certificate-shine"></div>
             </div>
