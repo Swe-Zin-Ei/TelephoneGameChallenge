@@ -1918,20 +1918,18 @@ function applyCategory(category) {
     if (category && gameState.currentCategory !== category) {
         gameState.currentCategory = category;
         
-        // FIX: moved categoryNames outside inner if-block to avoid ReferenceError
-        const categoryNames = {
-            easy: 'Easy',
-            medium: 'Medium',
-            hard: 'Hard',
-            funny: 'Funny',
-            movies: 'Movies'
-        };
-        
         if (elements.currentCategoryDisplay) {
+            const categoryNames = {
+                easy: 'Easy',
+                medium: 'Medium',
+                hard: 'Hard',
+                funny: 'Funny',
+                movies: 'Movies'
+            };
             elements.currentCategoryDisplay.textContent = categoryNames[category] || category;
         }
         
-        showNotification(`Category changed to ${categoryNames[category] || category}`, 'success');
+        showNotification(`Category changed to ${categoryNames[category]}`, 'success');
         
         if (!gameState.gameActive && elements.displayText) {
             const categoryData = gameConfig.categories[category];

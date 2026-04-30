@@ -4,10 +4,6 @@
     box-sizing: border-box;
 }
 
-html {
-    overflow-x: hidden;
-}
-
 /* ================================================================ */
 /* ROOT VARIABLES - LIGHT MODE                                       */
 /* ================================================================ */
@@ -56,7 +52,7 @@ html {
 /* BODY                                                            */
 /* ================================================================ */
 body {
-    font-family: 'Nunito', 'Quicksand', 'Poppins', sans-serif;
+    font-family: 'Nunito', 'Quicksand', sans-serif;
     min-height: 100vh;
     color: var(--text-dark);
     line-height: 1.6;
@@ -93,7 +89,6 @@ body {
     width: 100%;
 }
 .nav-container {
-    position: relative;
     max-width: 1400px;
     margin: 0 auto;
     padding: 5px 24px;
@@ -101,8 +96,6 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 18px;
-    flex-wrap: nowrap;
-    overflow: hidden;
 }
 .nav-brand {
     display: flex;
@@ -530,7 +523,7 @@ body {
     border-radius: var(--radius-lg);
     padding: 14px;
     box-shadow: inset 0 0 0 2px rgba(255,255,255,0.50), var(--shadow-sm);
-    display: flex; flex-direction: column; gap: 14px;
+    display: flex; flex-direction: column; gap: 40px;
     flex: 1; min-height: 0; overflow: hidden;
 }
 .button-row { display: flex; gap: 8px; width: 100%; }
@@ -1335,63 +1328,6 @@ body.dark-mode .feature-icon {
 }
 
 /* ================================================================ */
-/* TOAST NOTIFICATIONS & WELCOME TOAST                             */
-/* ================================================================ */
-.notification {
-    position: fixed;
-    top: 76px;
-    right: 16px;
-    background: var(--panel-dark);
-    color: var(--text-light);
-    padding: 12px 20px;
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-    font-size: 0.88rem;
-    z-index: 9998;
-    animation: slideInRight 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: var(--shadow-lg);
-    max-width: calc(100vw - 32px);
-    border: 2px solid rgba(255,255,255,0.20);
-    word-break: break-word;
-}
-.notification-success { border-left: 4px solid var(--accent-blue); }
-.notification-info    { border-left: 4px solid var(--accent-purple); background: var(--panel-mid); }
-.welcome-toast {
-    position: fixed;
-    top: 76px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--panel-dark);
-    color: var(--text-light);
-    padding: 12px 24px;
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-    font-size: 0.88rem;
-    z-index: 9998;
-    animation: slideInDown 0.3s ease;
-    box-shadow: var(--shadow-lg);
-    border: 2px solid rgba(255,255,255,0.20);
-    max-width: calc(100vw - 32px);
-    text-align: center;
-    white-space: nowrap;
-}
-@keyframes slideInRight {
-    from { opacity: 0; transform: translateX(40px); }
-    to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes slideInDown {
-    from { opacity: 0; transform: translate(-50%, -16px); }
-    to   { opacity: 1; transform: translate(-50%, 0); }
-}
-@keyframes slideOut {
-    from { opacity: 1; }
-    to   { opacity: 0; }
-}
-
-/* ================================================================ */
 /* SHORTCUT HELP MODAL                                              */
 /* ================================================================ */
 .shortcut-help-modal {
@@ -1949,43 +1885,6 @@ body.dark-mode .top-image {
 /* ================================================================ */
 @media (max-width: 1200px) { .nav-clock { display: none; } }
 @media (max-width: 768px) {
-    /* About page responsive */
-    .top-about {
-        grid-template-columns: 1fr;
-    }
-    .top-text {
-        border-right: none;
-        border-bottom: var(--border-w) solid var(--border-outer);
-        padding: 1.8rem 1.4rem;
-    }
-    .top-image {
-        min-height: 200px;
-    }
-    .bottom-about {
-        grid-template-columns: 1fr;
-    }
-    .bottom-label {
-        border-right: none;
-        border-bottom: var(--border-w) solid var(--border-outer);
-        padding: 10px;
-        min-height: 44px;
-    }
-    .bottom-label span {
-        writing-mode: horizontal-tb;
-        transform: none;
-        letter-spacing: 3px;
-        font-size: 0.95rem;
-    }
-    .bottom-center {
-        border-right: none;
-        padding: 1.4rem;
-    }
-    .bottom-right {
-        display: none; /* hidden on mobile - empty column */
-    }
-    .about-stack {
-        margin: 1rem;
-    }
     .nav-brand img { width: 32px; height: 32px; }
     .nav-menu {
         display: none; position: absolute;
@@ -1994,7 +1893,6 @@ body.dark-mode .top-image {
         flex-direction: column; padding: 14px;
         box-shadow: var(--shadow-lg);
         border-bottom: var(--border-w) solid var(--border-outer);
-        z-index: 999;
     }
     .nav-menu.active { display: flex; }
     .menu-toggle { display: flex; }
@@ -2011,8 +1909,6 @@ body.dark-mode .top-image {
         gap: 10px; flex: none;
     }
     .stat-item { flex: none; }
-    /* Hide tooltips on touch devices - they don't hover */
-    .stat-item::after { display: none; }
     .voice-controls-row { flex-direction: row; }
     .steps-grid { grid-template-columns: repeat(2, 1fr); }
     .features-grid { grid-template-columns: repeat(2, 1fr); }
@@ -2026,16 +1922,11 @@ body.dark-mode .top-image {
     .player-chain { flex-direction: column; }
     .phone-line { transform: rotate(90deg); margin: 10px 0; }
     .input-group { flex-direction: column; }
-    /* Make submit button full-width in column layout */
-    .input-group .submit-btn { width: 100%; }
     .voice-controls { flex-direction: column; }
     .account-stats { grid-template-columns: 1fr; }
     .final-stats { grid-template-columns: 1fr; }
     .footer-content { grid-template-columns: 1fr; }
     .game-header::before, .game-header::after { display: none; }
-    /* Notification on small screens */
-    .notification { right: 8px; top: 70px; font-size: 0.80rem; padding: 10px 14px; }
-    .welcome-toast { font-size: 0.80rem; padding: 10px 16px; white-space: normal; width: calc(100vw - 32px); }
 }
 @media (max-width: 600px) {
     .about-main { padding: 0 1rem; }
