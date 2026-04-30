@@ -1,7 +1,7 @@
 /**
  * Telephone Game Challenge - Main Game Logic
  * Version: 2.1 (Fixed Auto-Save & Sound Toggle)
- * Author: Swe Zin Ei Ei
+ * Author: Swe Zin Ei
  * Description: A browser-based telephone game with voice recognition, text-to-speech,
  *              persistent storage, achievements, and real-time similarity scoring.
  */
